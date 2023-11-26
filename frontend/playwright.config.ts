@@ -84,4 +84,5 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
+  globalSetup: require.resolve('./tests/example.spec.ts'),
 });
