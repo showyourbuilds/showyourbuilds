@@ -1,13 +1,15 @@
 "use client";
 import Navbar from "@/components/navbar/page";
 import React from "react";
-import { useSelector } from "react-redux";
-export default async function Home () {
-	const isLoggedIn = useSelector((state: any) => state.isLoggedIn);
+export default async function Home() {
 	return (
 		<>
-      <Navbar />
-			<p>Home page it is</p>
+			<Navbar />
+			<input
+				type="text"
+				className="flex md:hidden my-8 w-[80%] mx-auto py-4 px-8 outline-none rounded-[50px] bg-gray-200"
+				placeholder="Search.."
+			/>
 		</>
 	);
 }

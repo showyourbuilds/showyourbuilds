@@ -1,32 +1,123 @@
-import { setMode } from '@/redux/features/authSlice';
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { setMode } from "@/redux/features/authSlice";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
-  const isLoggedIn = useSelector((state: any) => state.isLoggedIn);
-  const mode = useSelector((state: any) => state.mode);
-  const dispatch = useDispatch();
-  const toggleMode = () => {
-    dispatch(setMode());
-  }
-  const li = ['Home', 'Explore']
-  return (
-    <div className='flex w-[100vw] h-[13vh] justify-between dark:bg-white'>
-      <p className='w-[20%] font-mono font-bold m-auto flex justify-center dark:text-black'>palettlepulse</p>
-      <ul className='w-[10%] flex justify-between m-auto list-none'>
-        {li.map((item) => (
-          <li key={item} className='font-mono font-bold flex items-center'>{item}</li>
-        ))}
-      </ul>
-      <div className='w-[60%] flex justify-around items-center'>
-        <input type='text' className='w-[40%] h-[50%] px-8 outline-none bg-slate-800' placeholder='Search..' />
-        <div className='w-[40%] flex items-center justify-around'>
-          <a><i className="fa-solid fa-cart-shopping text-2xl"></i></a>
-          <a className='flex items-center'><i className="fa-solid fa-bell text-2xl"></i><div className='w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-center text-white font-bold'></div></a>
-          {mode === "light" ? <i className="fa-regular fa-moon text-2xl" onClick={() => {toggleMode()}}></i> : <i className="fa-regular fa-sun text-2xl" onClick={() => {toggleMode()}}></i>}
-          <div><i className="fa-solid fa-user-circle text-3xl"></i></div>
-        </div>
-      </div>
-    </div>
-  )
+	const isLoggedIn = useSelector((state: any) => state.isLoggedIn);
+	const mode = useSelector((state: any) => state.mode);
+	const dispatch = useDispatch();
+	const toggleMode = () => {
+		dispatch(setMode());
+	};
+	const [isOpen, setIsOpen] = useState(false);
+	const handleClick = () => {
+		if (!isOpen) {
+			document
+				.getElementById("toggle-ul")
+				?.classList.replace("left-[-100vw]", "left-[0]");
+			document
+				.getElementById("toggle-ul")
+				?.classList.replace("rounded-br-[50%]", "rounded-br-[0]");
+			setIsOpen(!isOpen);
+		} else {
+			document
+				.getElementById("toggle-ul")
+				?.classList.replace("left-[0]", "left-[-100vw]");
+			document
+				.getElementById("toggle-ul")
+				?.classList.replace("rounded-br-[0]", "rounded-br-[50%]");
+			setIsOpen(!isOpen);
+		}
+	};
+	const li = ["Home", "Explore"];
+	return (
+		<div className="flex w-[100%] max-w-[1700px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
+			<p className="logo md:w-[20%] w-[40%] m-auto flex justify-center items-center">
+				palettle&nbsp;
+				<span className="bg-black text-white p-2 logo">pulse</span>
+			</p>
+			<ul
+				id="toggle-ul"
+				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-10 absolute md:relative md:flex md:left-0 left-[-100vw] justify-between m-auto list-none pt-14 pl-8 md:p-0 items-center"
+			>
+				{li.map((item) => (
+					<li
+						key={item}
+						className="mx-4 flex items-center bg-transparent text-white md:text-black my-8 md:my-0 hover:bg-gray-500 hover:p-4 transition-all"
+					>
+						{item}
+					</li>
+				))}
+				<li className="mx-4 md:hidden flex items-center bg-transparent my-8 hover:bg-gray-500 hover:p-4 transition-all">
+					<i className="fa-solid fa-user-circle text-[2.5rem] bg-transparent text-white"></i>
+					<p className="bg-transparent text-white mx-4">user</p>
+				</li>
+				<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-black my-8 md:my-0">
+					<button className={`py-2 px-4 border hover:bg-white hover:text-black border-gray-200 ${!isLoggedIn ? 'text-white' : 'text-red-600'}`}>{isLoggedIn ? "Logout" : "Login"}</button>
+				</li>
+			</ul>
+			<div className="w-[40%] md:w-[60%] flex justify-around items-center">
+				<input
+					type="text"
+					className="hidden md:flex md:w-[50%] h-[45%] px-8 outline-none rounded-[50px] bg-gray-200"
+					placeholder="Search.."
+				/>
+				<div className="w-[80%] md:w-[20%] flex items-center justify-around">
+					<a>
+						<i className="fa-solid fa-cart-shopping text-[1rem]"></i>
+					</a>
+					<a className="flex items-center">
+						<i className="fa-solid fa-bell text-[1rem]"></i>
+						<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
+					</a>
+					{/* {mode === "light" ? (
+						<i
+							className="fa-regular fa-moon text-[1rem]"
+							onClick={() => {
+								toggleMode();
+							}}
+						></i>
+					) : (
+						<i
+							className="fa-regular fa-sun text-[1rem]"
+							onClick={() => {
+								toggleMode();
+							}}
+						></i>
+					)} */}
+					<div className="md:block hidden">
+						<i className="fa-solid fa-user-circle text-[1.5rem]"></i>
+					</div>
+					<div
+						id="menuIcon"
+						className="cursor-pointer md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-20"
+						onClick={handleClick}
+					>
+						<div
+							id="bar1"
+							className={`w-6 h-1 bg-black mb-1 transition-transform duration-300 ${
+								isOpen
+									? "transform rotate-45 translate-x-1 translate-y-2"
+									: ""
+							}`}
+						></div>
+						<div
+							id="bar2"
+							className={`w-6 h-1 bg-black mb-1 transition-opacity duration-300 ${
+								isOpen ? "opacity-0" : ""
+							}`}
+						></div>
+						<div
+							id="bar3"
+							className={`w-6 h-1 bg-black transition-transform duration-300 ${
+								isOpen
+									? "transform -rotate-45 translate-x-1 -translate-y-2"
+									: ""
+							}`}
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
