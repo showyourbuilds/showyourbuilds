@@ -1,7 +1,9 @@
+"use client";
+
 import { setMode } from "@/redux/features/authSlice";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 export default function Navbar() {
 	const isLoggedIn = useSelector((state: any) => state.isLoggedIn);
 	const mode = useSelector((state: any) => state.mode);
@@ -40,14 +42,20 @@ export default function Navbar() {
 				id="toggle-ul"
 				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-10 absolute md:relative md:flex md:left-0 left-[-100vw] justify-around m-auto list-none pt-14 pl-8 md:p-0 items-center"
 			>
-				{li.map((item) => (
-					<li
-						key={item}
-						className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
-					>
-						{item}
-					</li>
-				))}
+				<li
+					className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
+				>
+					<Link href={'/'}>
+						Home
+					</Link>
+				</li>
+				<li
+					className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
+				>
+					<Link href={'/explore'}>
+						Explore
+					</Link>
+				</li>
 				<li className="mx-4 md:hidden flex items-center bg-transparent my-8 hover:bg-gray-500 hover:p-4 transition-all">
 					<i className="fa-solid fa-user-circle text-[2.5rem] bg-transparent text-white"></i>
 					<p className="bg-transparent text-white mx-4">user</p>
@@ -64,10 +72,10 @@ export default function Navbar() {
 				/>
 				<div className="w-[80%] md:w-[20%] flex items-center justify-around">
 					<a>
-						<i className="fa-solid fa-cart-shopping text-[1rem]"></i>
+						<i className="fa-solid fa-cart-shopping text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
 					</a>
 					<a className="flex items-center">
-						<i className="fa-solid fa-bell text-[1rem]"></i>
+						<i className="fa-solid fa-bell text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
 						<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
 					</a>
 					{/* {mode === "light" ? (
@@ -85,8 +93,10 @@ export default function Navbar() {
 							}}
 						></i>
 					)} */}
-					<div className="md:block hidden">
-						<i className="fa-solid fa-user-circle text-[1.5rem]"></i>
+					<div className="md:block hidden cursor-pointer">
+						<Link href={'/profile/dummyuser'}>
+							<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
+						</Link>
 					</div>
 					<div
 						id="menuIcon"

@@ -1,15 +1,16 @@
 "use client";
-
 import { PersistGate } from "redux-persist/integration/react";
-import { store } from "./store";
+import { persistor, store } from "./store";
 import { Provider } from "react-redux";
-import { persistStore } from "redux-persist";
+import Navbar from "@/components/navbar/page";
 
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
 	return (
 		<Provider store={store}>
-			<PersistGate persistor={persistStore(store)}></PersistGate>
-			{children}
+			<PersistGate persistor={persistor}>
+				<Navbar />
+				{children}
+			</PersistGate>
 		</Provider>
 	);
 }
