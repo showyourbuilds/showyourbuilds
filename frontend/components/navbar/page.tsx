@@ -38,12 +38,12 @@ export default function Navbar() {
 			</p>
 			<ul
 				id="toggle-ul"
-				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-10 absolute md:relative md:flex md:left-0 left-[-100vw] justify-between m-auto list-none pt-14 pl-8 md:p-0 items-center"
+				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-10 absolute md:relative md:flex md:left-0 left-[-100vw] justify-around m-auto list-none pt-14 pl-8 md:p-0 items-center"
 			>
 				{li.map((item) => (
 					<li
 						key={item}
-						className="mx-4 flex items-center bg-transparent text-white md:text-black my-8 md:my-0 hover:bg-gray-500 hover:p-4 transition-all"
+						className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
 					>
 						{item}
 					</li>
@@ -95,7 +95,7 @@ export default function Navbar() {
 					>
 						<div
 							id="bar1"
-							className={`w-6 h-1 bg-black mb-1 transition-transform duration-300 ${
+							className={`w-5 h-1 bg-black mb-1 transition-transform duration-300 ${
 								isOpen
 									? "transform rotate-45 translate-x-1 translate-y-2"
 									: ""
@@ -103,13 +103,13 @@ export default function Navbar() {
 						></div>
 						<div
 							id="bar2"
-							className={`w-6 h-1 bg-black mb-1 transition-opacity duration-300 ${
+							className={`w-5 h-1 bg-black mb-1 transition-opacity duration-300 ${
 								isOpen ? "opacity-0" : ""
 							}`}
 						></div>
 						<div
 							id="bar3"
-							className={`w-6 h-1 bg-black transition-transform duration-300 ${
+							className={`w-5 h-1 bg-black transition-transform duration-300 ${
 								isOpen
 									? "transform -rotate-45 translate-x-1 -translate-y-2"
 									: ""
