@@ -1,5 +1,4 @@
 "use client";
-
 import { setMode } from "@/redux/features/authSlice";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -33,7 +32,7 @@ export default function Navbar() {
 	};
 	const li = ["Home", "Explore"];
 	return (
-		<div className="flex w-[100%] max-w-[1700px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
+		<div className="flex w-[100%] max-w-[1700px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
 			<p className="logo md:w-[20%] w-[40%] m-auto flex justify-center items-center">
 				palettle&nbsp;
 				<span className="bg-black text-white p-2 logo">pulse</span>
@@ -45,14 +44,14 @@ export default function Navbar() {
 				<li
 					className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
 				>
-					<Link href={'/'}>
+					<Link href={'/'} className="bg-transparent">
 						Home
 					</Link>
 				</li>
 				<li
 					className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all"
 				>
-					<Link href={'/explore'}>
+					<Link href={'/explore'} className="bg-transparent">
 						Explore
 					</Link>
 				</li>
@@ -61,7 +60,7 @@ export default function Navbar() {
 					<p className="bg-transparent text-white mx-4">user</p>
 				</li>
 				<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-black my-8 md:my-0">
-					<button className={`py-2 px-4 border hover:bg-white hover:text-black border-gray-200 ${!isLoggedIn ? 'text-white' : 'text-red-600'}`}>{isLoggedIn ? "Logout" : "Login"}</button>
+					<Link href={'/auth'} className={`py-2 px-4 border text-center hover:bg-white hover:text-black border-gray-200 ${!isLoggedIn ? 'text-white' : 'text-red-600'}`}>{isLoggedIn ? "Logout" : "Login"}</Link>
 				</li>
 			</ul>
 			<div className="w-[40%] md:w-[60%] flex justify-around items-center">
@@ -70,63 +69,74 @@ export default function Navbar() {
 					className="hidden md:flex md:w-[50%] h-[45%] px-8 outline-none rounded-[50px] bg-gray-200"
 					placeholder="Search.."
 				/>
-				<div className="w-[80%] md:w-[20%] flex items-center justify-around">
-					<a>
-						<i className="fa-solid fa-cart-shopping text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
-					</a>
-					<a className="flex items-center">
-						<i className="fa-solid fa-bell text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
-						<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
-					</a>
-					{/* {mode === "light" ? (
-						<i
-							className="fa-regular fa-moon text-[1rem]"
-							onClick={() => {
-								toggleMode();
-							}}
-						></i>
-					) : (
-						<i
-							className="fa-regular fa-sun text-[1rem]"
-							onClick={() => {
-								toggleMode();
-							}}
-						></i>
-					)} */}
-					<div className="md:block hidden cursor-pointer">
-						<Link href={'/profile/dummyuser'}>
-							<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
-						</Link>
+				{isLoggedIn 
+				?
+				<>
+					<div className="w-[80%] md:min-w-[140px] md:w-[20%] flex items-center justify-around">
+						<a>
+							<i className="fa-solid fa-cart-shopping text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
+						</a>
+						<a className="flex items-center">
+							<i className="fa-solid fa-bell text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
+							<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
+						</a>
+						{/* {mode === "light" ? (
+							<i
+								className="fa-regular fa-moon text-[1rem]"
+								onClick={() => {
+									toggleMode();
+								}}
+							></i>
+						) : (
+							<i
+								className="fa-regular fa-sun text-[1rem]"
+								onClick={() => {
+									toggleMode();
+								}}
+							></i>
+						)} */}
+						<div className="md:block hidden cursor-pointer">
+							<Link href={'/profile/dummyuser'}>
+								<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
+							</Link>
+						</div>
+						<div
+							id="menuIcon"
+							className="cursor-pointer bg-white md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-20"
+							onClick={handleClick}
+						>
+							<div
+								id="bar1"
+								className={`w-5 h-1 bg-black mb-1 transition-transform duration-300 ${
+									isOpen
+										? "transform rotate-45 translate-x-1 translate-y-2"
+										: ""
+								}`}
+							></div>
+							<div
+								id="bar2"
+								className={`w-5 h-1 bg-black mb-1 transition-opacity duration-300 ${
+									isOpen ? "opacity-0" : ""
+								}`}
+							></div>
+							<div
+								id="bar3"
+								className={`w-5 h-1 bg-black transition-transform duration-300 ${
+									isOpen
+										? "transform -rotate-45 translate-x-1 -translate-y-2"
+										: ""
+								}`}
+							></div>
+						</div>
 					</div>
-					<div
-						id="menuIcon"
-						className="cursor-pointer md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-20"
-						onClick={handleClick}
-					>
-						<div
-							id="bar1"
-							className={`w-5 h-1 bg-black mb-1 transition-transform duration-300 ${
-								isOpen
-									? "transform rotate-45 translate-x-1 translate-y-2"
-									: ""
-							}`}
-						></div>
-						<div
-							id="bar2"
-							className={`w-5 h-1 bg-black mb-1 transition-opacity duration-300 ${
-								isOpen ? "opacity-0" : ""
-							}`}
-						></div>
-						<div
-							id="bar3"
-							className={`w-5 h-1 bg-black transition-transform duration-300 ${
-								isOpen
-									? "transform -rotate-45 translate-x-1 -translate-y-2"
-									: ""
-							}`}
-						></div>
+				</>
+				:
+				<>
+					<div className="w-[80%] md:min-w-[140px] md:w-[20%] flex items-center justify-around">
+						<Link href={'/auth'} className="w-[70%] text-center border border-transparent bg-black text-white hover:bg-white hover:text-black hover:border hover:border-black py-[5px] text-[12px] rounded-[0.2rem]">login / signup</Link>
 					</div>
-				</div>
+				</>
+				}
 			</div>
 		</div>
 	);

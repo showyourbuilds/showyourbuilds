@@ -1,9 +1,9 @@
 import React from "react";
 import data from '../public/dummyproducts.json';
-
+import ComposedLayout from "@/components/layouts/ComposedLayout";
 export default async function Home() {
 	return (
-		<>
+		<ComposedLayout>
 			<input
 				type="text"
 				className="flex md:hidden my-8 w-[80%] mx-auto py-3 px-8 outline-none rounded-[50px] bg-gray-200"
@@ -35,7 +35,11 @@ export default async function Home() {
 					)
 				})}	
 			</div>
-		</>
+		</ComposedLayout>
 	);
 }
+
+Home.getLayout = function getLayout(page: any) {
+	<ComposedLayout>{page}</ComposedLayout>;
+};
 	
