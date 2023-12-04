@@ -4,7 +4,7 @@ const connect = async () => {
     if (mongoose.connections[0].readyState) return;
 
     try {
-        await mongoose.connect("mongodb+srv://anirudh26p:anirudh4palettepulse@palettlepulse.87nz34r.mongodb.net/palettepulse", {
+        await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

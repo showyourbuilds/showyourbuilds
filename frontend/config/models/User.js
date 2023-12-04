@@ -6,6 +6,7 @@ const user = new mongoose.Schema({
     password: { type: String, required: false },
     role: { type: String, required: true, default: 'user' },
     image: { type: String, required: false },
+    provider: { type: String, required: true, default: 'credentials' },
 }, 
 {
     timestamps: true,
