@@ -33,9 +33,11 @@ export default function Navbar() {
 	const li = ["Home", "Explore"];
 	return (
 		<div className="flex w-[100%] max-w-[1700px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
-			<p className="logo md:w-[20%] w-[40%] m-auto flex justify-center items-center">
-				palettle&nbsp;
-				<span className="bg-black text-white p-2 logo">pulse</span>
+			<p className="md:w-[20%] w-[40%] m-auto flex justify-center items-center">
+				<span className="border p-2 border-black font-serif">
+				palettle
+				</span>
+				<span className="bg-black border border-transparent text-white p-2 font-serif">pulse</span>
 			</p>
 			<ul
 				id="toggle-ul"
