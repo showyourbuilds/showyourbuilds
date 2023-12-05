@@ -1,122 +1,140 @@
 [
 	{
+		"id": 1,
 		"pname": "SmartWatch X",
 		"pprice": 99.99,
 		"pavailability": true,
 		"pdescription": "Stay connected with the latest SmartWatch X, featuring health tracking, notifications, and a sleek design."
 	},
 	{
+		"id": 2,
 		"pname": "Wireless Earbuds Pro",
 		"pprice": 79.99,
 		"pavailability": true,
 		"pdescription": "Immerse yourself in music with the Wireless Earbuds Pro, offering high-quality sound and noise cancellation."
 	},
 	{
+		"id": 3,
 		"pname": "Home Security Camera",
 		"pprice": 129.99,
 		"pavailability": true,
 		"pdescription": "Keep your home secure with our advanced Home Security Camera, equipped with night vision and motion detection."
 	},
 	{
+		"id": 4,
 		"pname": "Eco-Friendly Water Bottle",
 		"pprice": 19.99,
 		"pavailability": true,
 		"pdescription": "Stay hydrated on the go with our Eco-Friendly Water Bottle, made from sustainable materials."
 	},
 	{
+		"id": 5,
 		"pname": "Laptop Backpack",
 		"pprice": 49.99,
 		"pavailability": true,
 		"pdescription": "Carry your essentials in style with the Laptop Backpack, featuring multiple compartments for organization."
 	},
 	{
+		"id": 6,
 		"pname": "Fitness Tracker",
 		"pprice": 69.99,
 		"pavailability": true,
 		"pdescription": "Achieve your fitness goals with the Fitness Tracker, monitoring steps, heart rate, and sleep patterns."
 	},
 	{
+		"id": 7,
 		"pname": "Portable Bluetooth Speaker",
 		"pprice": 39.99,
 		"pavailability": true,
 		"pdescription": "Enjoy music anywhere with our Portable Bluetooth Speaker, delivering crisp sound and a compact design."
 	},
 	{
+		"id": 8,
 		"pname": "Electric Coffee Maker",
 		"pprice": 59.99,
 		"pavailability": true,
 		"pdescription": "Start your day right with the Electric Coffee Maker, brewing your favorite coffee in minutes."
 	},
 	{
+		"id": 9,
 		"pname": "Virtual Reality Headset",
 		"pprice": 149.99,
 		"pavailability": true,
 		"pdescription": "Dive into immersive experiences with the Virtual Reality Headset, compatible with a variety of apps and games."
 	},
 	{
+		"id": 10,
 		"pname": "Air Purifier",
 		"pprice": 89.99,
 		"pavailability": true,
 		"pdescription": "Breathe cleaner air with our advanced Air Purifier, removing allergens and pollutants from your home."
 	},
 	{
+		"id": 11,
 		"pname": "Smart LED Light Bulbs",
 		"pprice": 19.99,
 		"pavailability": true,
 		"pdescription": "Illuminate your space with Smart LED Light Bulbs, controllable via a mobile app for customized lighting."
 	},
 	{
+		"id": 12,
 		"pname": "Stainless Steel Cooking Set",
 		"pprice": 129.99,
 		"pavailability": true,
 		"pdescription": "Upgrade your kitchen with the Stainless Steel Cooking Set, featuring durable and versatile cookware."
 	},
 	{
+		"id": 13,
 		"pname": "Solar-Powered Phone Charger",
 		"pprice": 29.99,
 		"pavailability": true,
 		"pdescription": "Charge your devices on the go with the Solar-Powered Phone Charger, harnessing the power of the sun."
 	},
 	{
+		"id": 14,
 		"pname": "Gaming Mouse",
 		"pprice": 49.99,
 		"pavailability": true,
 		"pdescription": "Enhance your gaming experience with the precision of our Gaming Mouse, designed for comfort and performance."
 	},
 	{
+		"id": 15,
 		"pname": "Wireless Charging Pad",
 		"pprice": 24.99,
 		"pavailability": true,
 		"pdescription": "Simplify charging with our Wireless Charging Pad, compatible with a wide range of smartphones."
 	},
 	{
+		"id": 16,
 		"pname": "Bluetooth Fitness Scale",
 		"pprice": 39.99,
 		"pavailability": true,
 		"pdescription": "Track your fitness journey with the Bluetooth Fitness Scale, syncing data to your mobile device for easy monitoring."
 	},
 	{
+		"id": 17,
 		"pname": "Outdoor Camping Tent",
 		"pprice": 89.99,
 		"pavailability": true,
 		"pdescription": "Experience the great outdoors with our spacious and weather-resistant Outdoor Camping Tent."
 	},
 	{
+		"id": 18,
 		"pname": "Noise-Canceling Headphones",
 		"pprice": 109.99,
 		"pavailability": true,
 		"pdescription": "Escape into your own world with our Noise-Canceling Headphones, perfect for travel or quiet moments."
 	},
 	{
+		"id": 19,
 		"pname": "4K Action Camera",
 		"pprice": 149.99,
 		"pavailability": true,
 		"pdescription": "Capture your adventures in stunning detail with the 4K Action Camera, waterproof and ready for action."
 	},
 	{
+		"id": 20,
 		"pname": "Robot Vacuum Cleaner",
-		"pprice": 199.99,
-		"pavailability": true,
-		"pdescription": "Keep your home clean effortlessly with the Robot Vacuum Cleaner, equipped with smart navigation and scheduling features."
+		"pprice": 199.99
 	}
 ]

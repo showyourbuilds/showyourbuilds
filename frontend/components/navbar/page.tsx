@@ -133,7 +133,7 @@ export default function Navbar() {
 				:
 				<>
 					<div className="w-[80%] md:min-w-[140px] md:w-[20%] flex items-center justify-around">
-						<Link href={'/auth'} className="w-[70%] text-center border border-transparent bg-black text-white hover:bg-white hover:text-black hover:border hover:border-black py-[5px] text-[12px] rounded-[0.2rem]">login / signup</Link>
+						<Link href={'/auth'} className="w-[80%] bg-gray-200 text-center border border-transparent hover:border hover:border-black py-[5px] text-[15px] font-serif">Login &nbsp;||&nbsp; SignUp</Link>
 					</div>
 				</>
 				}

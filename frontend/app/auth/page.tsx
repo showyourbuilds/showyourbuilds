@@ -2,6 +2,7 @@
 import BlankLayout from "@/components/layouts/BlankLayout";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function auth() {
 	const router = useRouter();
@@ -12,9 +13,20 @@ export default function auth() {
 		);
 		return emailRegex.test(email);
 	};
+	const handleLogin = async (e: any) => {
+		e.preventDefault();
+		const email = e.target[0].email;
+		const password = e.target[1].password;
+		if (!email || !password || password.length < 8) return;
+		if (!checkEmail(email)) return;
+		try {
+			signIn(email, password);
+		} catch (error) {
+			console.log(error);
+			return;
+		}
+	}
 	const handleSubmit = async (e: any) => {
-		console.log("submit");
-
 		e.preventDefault();
 		const name = e.target[0].value;
 		const email = e.target[1].value;
