@@ -34,10 +34,10 @@ export default function Navbar() {
 	return (
 		<div className="flex w-[100%] max-w-[1700px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
 			<p className="md:w-[20%] w-[40%] m-auto flex justify-center items-center">
-				<span className="border p-2 border-black font-serif">
-				palettle
+				<span className="py-2 font-serif">
+				showmybuild
 				</span>
-				<span className="bg-black border border-transparent text-white p-2 font-serif">pulse</span>
+				<span className="bg-black border border-transparent text-white py-2 font-serif">.cs</span>
 			</p>
 			<ul
 				id="toggle-ul"
