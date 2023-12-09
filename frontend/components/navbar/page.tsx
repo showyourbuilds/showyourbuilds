@@ -101,7 +101,7 @@ export default function Navbar() {
 							></i>
 						)} */}
 						<Link href={"/profile/dummyuser"}>
-							<div className="md:flex items-center hidden cursor-pointer mx-4 hover:border hover:text-white transition px-2 py-4 rounded-md">
+							<div className="md:flex items-center hidden cursor-pointer mx-4 hover:border transition px-2 py-4 rounded-md">
 									{session?.user?.image ? (
 										<img
 											src={session?.user?.image}

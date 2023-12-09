@@ -31,7 +31,7 @@ export default function ProductCard({ item, key }: { item: any, key : any }) {
 				</div>
 			)}
 			<div className="w-full h-fit rounded-t-lg">
-				<img src="/assets/lwm-preview.png" width={'100%'} alt="" />
+				<img src="/assets/1.jpg" width={'100%'} alt="" />
 			</div>
 			<div className="w-full rounded-b-lg border p-2">
 				<div className="flex items-center py-2 px-4">
