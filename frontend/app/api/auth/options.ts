@@ -1,4 +1,4 @@
-import { AuthOptions } from "next-auth";
+import { AuthOptions, Profile } from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -39,16 +39,24 @@ export const authOptions: AuthOptions = {
 		GithubProvider({
 			clientId: process.env.GITHUB_ID ?? "",
 			clientSecret: process.env.GITHUB_SECRET ?? "",
+			profile(profile) {
+				return {
+				  id: profile.id.toString(),
+				  name: profile.name ?? profile.login,
+				  username: profile.login,
+				  email: profile.email,
+				  image: profile.avatar_url,
+				};
+			},
 		}),
-		// ...add more providers here
 	],
 	callbacks: {
 		async signIn({
 			user,
-			account,
+			account
 		}: {
-			user: AuthUser | AdapterUser;
-			account: Account | null;
+			user: AuthUser | AdapterUser,
+			account: Account | null,
 		}) {
 			if (account?.provider == "credentials") {
 				return true;
@@ -60,9 +68,10 @@ export const authOptions: AuthOptions = {
 					});
 					if (!existingUser) {
 						const newUser = new User({
+							name: user.name as string,
 							email: user.email as string,
+							provider: "github",
 						});
-
 						await newUser.save();
 						return true;
 					}

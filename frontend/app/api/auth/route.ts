@@ -19,8 +19,8 @@ export const POST = async (req: any) => {
         name: name,
     });
     try {
-        await newUser.save();
-        return new NextResponse('User created', {
+        const savedUser = await newUser.save();
+        return new NextResponse(savedUser, {
             status: 201,
         });
     } catch (error) {
