@@ -13,14 +13,14 @@ export default function User({ params }: { params: { user: string } }) {
 		if (params.user === user?._id) {
 			return (
 				<Link href={'/profile/editProfile'}>
-					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4 h-[80%]">
+					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
 						Edit Profile
 					</button>
 				</Link>
 			);
 		} else {
 			return (
-				<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4 h-[80%]">
+				<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
 					Follow
 				</button>
 			);
@@ -32,7 +32,7 @@ export default function User({ params }: { params: { user: string } }) {
 				<div className="w-full aspect-[3/1] relative" id="header">
 					<img src="/assets/header.jpeg" className="w-full" alt="" />
 					<img
-						src={session?.user?.image || "/assets/account.png"}
+						src={user?.image || "/assets/account.png"}
 						className="absolute w-[10%] z-[10] rounded-[50%] border-white bg-white left-4 bottom-[15px]"
 						alt=""
 					/>
@@ -47,10 +47,10 @@ export default function User({ params }: { params: { user: string } }) {
 					>
 						<div className="pl-2">
 							<p className="text-[1.5rem] font-sans font-bold">
-								{session?.user?.name}
+								{user?.name}
 							</p>
 							<p className="text-[1rem] text-gray-500 font-sans font-thin">
-								@username
+								@{user?.username}
 							</p>
 						</div>
 						{profileBtns()}
@@ -60,8 +60,7 @@ export default function User({ params }: { params: { user: string } }) {
 						id="profile-bio"
 					>
 						<p className="text-[1rem] font-semibold font-sans">
-							CSE'25 • Web Dev • DevOps • Ai/ML • Open Source •
-							Building @showyourbuilds
+							{user?.bio}
 						</p>
 					</div>
 					<div className="flex items-center w-full py-4">
