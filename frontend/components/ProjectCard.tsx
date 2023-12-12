@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import UserPreview from "./UserPreview";
 import TechStack from "./TechStack";
 
-export default function ProductCard({ item, key }: { item: any, key : any }) {
+export default function ProjectCard({ item, key }: { item: any, key : any }) {
 	const [isLiked, setLiked] = useState(false);
 	const handleLike = () => {
 		setLiked(!isLiked);

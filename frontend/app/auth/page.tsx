@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import Alert from "@/components/Alert";
+import LoadingPage from "@/components/LoadingPage";
 
 export default function auth() {
 	const router = useRouter();
+	const [loading, setLoading] = useState(false);
 	const [loginPage, setLoginPage] = useState(true);
 	const [isAlertOpen, setIsAlertOpen] = useState(false);
 	const [alertMessage, setAlertMessage] = useState("");
@@ -31,9 +33,11 @@ export default function auth() {
 		return emailRegex.test(email);
 	};
 	const handleGithubLogin = async () => {
+		setLoading(true);
 		signIn("github");
 	}
 	const handleLogin = async (e: any) => {
+		setLoading(true);
 		e.preventDefault();
 		const email = e.target[0].value;
 		const password = e.target[1].value;
@@ -44,25 +48,30 @@ export default function auth() {
 			email,
 			password,
 		});
-
 		if (res?.error) {
 			setAlertMessage("Invalid Credentials");
 			openAlert();
+			setLoading(false);
 		} else {
 			router.push("/");
+			setLoading(false);
 		}
 	}
 	const handleSubmit = async (e: any) => {
+		setLoading(true);
 		e.preventDefault();
 		const name = e.target[0].value;
-		const email = e.target[1].value;
+		const username = e.target[1].value;
+		const email = e.target[2].value;
 		if (!checkEmail(email)) {
 			console.log("enter proper email");
+			setLoading(false);
 			return;
 		}
 		const password = e.target[2].value;
 		if (!password || password.length < 8) {
 			console.log("password must be atleast 8 characters long");
+			setLoading(false);
 			return;
 		}
 		try {
@@ -71,23 +80,40 @@ export default function auth() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ name, email, password }),
+				body: JSON.stringify({ name, username, email, password }),
 			});
-			if (res.status === 400) {
+			const responce = await res.json() as any;
+			const user = responce?.user;
+			const status = responce?.status;
+			if (status === 400) {
+				setLoading(false);
 				console.log("Email already Registered");
 				setAlertMessage("This email is already registered");
 				openAlert();
 			}
-			if (res.status === 500) {
+			if (status === 500) {
+				setLoading(false);
 				console.log("Server Error");
 				setAlertMessage("Server Error");
 				openAlert();
 			}
-			if (res.status === 201) {
-				console.log(res);
-				router.push("/");
+			if (status === 201) {
+				const loginres = await signIn("credentials", {
+					redirect: false,
+					email: user.email,
+					password: user.password,
+				});
+				if (loginres?.error) {
+				setLoading(false);
+					setAlertMessage("Invalid Credentials");
+					openAlert();
+				} else {
+				setLoading(false);
+					router.push("/");
+				}
 			}
 		} catch (error) {
+			setLoading(false);
 			setAlertMessage(`${error}`);
 			openAlert();
 			console.log(error);
@@ -95,6 +121,9 @@ export default function auth() {
 	};
 	return (
 		<BlankLayout>
+			<div className={`${loading ? "block" : "hidden"}`}>
+				<LoadingPage />
+			</div>
 			<Alert
 				isOpen={isAlertOpen}
 				onClose={closeAlert}
@@ -186,6 +215,11 @@ export default function auth() {
 						<input
 							type="text"
 							placeholder="name"
+							className="my-2 p-2 border"
+						/>
+						<input
+							type="text"
+							placeholder="username"
 							className="my-2 p-2 border"
 						/>
 						<input

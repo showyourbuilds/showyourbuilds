@@ -85,45 +85,27 @@ export default function Navbar() {
 								<i className="fa-solid fa-bell text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
 								<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
 							</a>
-							{/* {mode === "light" ? (
-							<i
-								className="fa-regular fa-moon text-[1rem]"
-								onClick={() => {
-									toggleMode();
-								}}
-							></i>
-						) : (
-							<i
-								className="fa-regular fa-sun text-[1rem]"
-								onClick={() => {
-									toggleMode();
-								}}
-							></i>
-						)} */}
-						<Link href={"/profile/dummyuser"}>
-							<div className="md:flex items-center hidden cursor-pointer mx-4 hover:border transition px-2 py-4 rounded-md">
+							{/* <Link href={"/profile/dummyuser"}>
+								<div className="md:flex items-center hidden cursor-pointer mx-4 hover:border transition px-2 py-4 rounded-md">
 									{session?.user?.image ? (
 										<img
 											src={session?.user?.image}
 											alt=""
-											width={'34px'}
+											width={"34px"}
 											className="rounded-full"
 										/>
 									) : (
 										<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
 									)}
-								<p className="text-[13px] text-gray-400 mx-2">{session?.user?.name}</p>
-								{/* <UserPreview user={} /> */}
-							</div>
-								</Link>
+									<p className="text-[15px] text-gray-500 font-sans mx-2">
+										{session?.user?.name}
+									</p>
+								</div>
+							</Link> */}
+							<UserPreview user={session?.user} />
 							<div className="md:block hidden cursor-pointer">
 								<div className="md:min-w-[140px] flex items-center">
-									<button
-										onClick={() => signOut()}
-										className="text-center bg-gray-200 text-[#495057] hover:border-black px-6 py-2 text-[15px] font-thin rounded-lg"
-									>
-										Logout
-									</button>
+									<button onClick={() => signOut()} className='border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4'>Logout</button>
 								</div>
 							</div>
 							<div
@@ -161,9 +143,8 @@ export default function Navbar() {
 						<div className="w-[80%] md:min-w-[140px] md:w-[20%] flex items-center">
 							<Link
 								href={"/auth"}
-								className="text-center bg-gray-200 text-[#495057] hover:border-black px-6 py-2 text-[15px] font-thin rounded-lg"
 							>
-								Login
+								<button className='border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4'>Login</button>
 							</Link>
 						</div>
 					</>

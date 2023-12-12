@@ -1,4 +1,4 @@
-import { AuthOptions, Profile } from "next-auth";
+import { AuthOptions, Session } from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import User from "@/config/models/User";
 import connect from "@/config/db";
 import { AdapterUser } from "next-auth/adapters";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions: AuthOptions = {
 	providers: [
@@ -41,22 +42,25 @@ export const authOptions: AuthOptions = {
 			clientSecret: process.env.GITHUB_SECRET ?? "",
 			profile(profile) {
 				return {
-				  id: profile.id.toString(),
-				  name: profile.name ?? profile.login,
-				  username: profile.login,
-				  email: profile.email,
-				  image: profile.avatar_url,
+					id: profile.id.toString(),
+					name: profile.name ?? profile.login,
+					username: profile.login,
+					email: profile.email,
+					image: profile.avatar_url,
 				};
 			},
 		}),
 	],
+	session: {
+		strategy: "jwt",
+	},
 	callbacks: {
 		async signIn({
 			user,
-			account
+			account,
 		}: {
-			user: AuthUser | AdapterUser,
-			account: Account | null,
+			user: AuthUser | AdapterUser;
+			account: Account | null;
 		}) {
 			if (account?.provider == "credentials") {
 				return true;
@@ -82,6 +86,51 @@ export const authOptions: AuthOptions = {
 				}
 			} else {
 				return false;
+			}
+		},
+		async jwt({ token, account, profile }) {
+			if (account) {
+				if (account.provider == "credentials") {
+					token.provider = "credentials";
+					token = { ...token };
+				} else if (account.provider == "github") {
+					token.accessToken = account.accessToken;
+					token.provider = "github";
+					token.id = profile?.sub;
+				}
+			}
+			return token;
+		},
+		async session({ session, token }: { session: any; token: JWT }) {
+			if (token.provider == "credentials") {
+				await connect();
+				const res = await User.findOne({ _id: token.sub as string });
+				delete res.password;
+				session.user = res;
+				session.token = token;
+				return session;
+			} else if (token.provider == "github") {
+				await connect();
+				const res = await User.findOne({
+					email: token.email as string,
+				});
+				if (!res) {
+					const newUser = new User({
+						name: token.name as string,
+						email: token.email as string,
+						provider: "github",
+						image: token.picture as string,
+					});
+					await newUser.save();
+					session.user = newUser;
+					session.token = token;
+					return session;
+				} else {
+					delete res.password;
+					session.user = res;
+					session.token = token;
+					return session;
+				}
 			}
 		},
 	},

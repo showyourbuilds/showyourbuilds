@@ -19,7 +19,9 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-					<ReduxProvider session={session}>{children}</ReduxProvider>
+					<ReduxProvider session={session}>
+						{children}
+					</ReduxProvider>
 				<script
 					src="https://kit.fontawesome.com/eae0ccc16c.js"
 					crossOrigin="anonymous"

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 
 export const POST = async (req: any) => {
-    const {email, password, name} = await req.json();
+    const {email, password, name, image} = await req.json();
     await connect();
     const existingUser = await User.findOne({email: email});
     if (existingUser) {
@@ -17,15 +17,13 @@ export const POST = async (req: any) => {
         email: email,
         password: hashedPassword,
         name: name,
+        image: image || ""
     });
     try {
         const savedUser = await newUser.save();
-        return new NextResponse(savedUser, {
-            status: 201,
-        });
+        console.log("Route.ts signup" + savedUser);
+        return NextResponse.json({ user: savedUser, status: 201 });
     } catch (error) {
-        return new NextResponse(error as any, {
-            status: 500,
-        });    
+        return NextResponse.json({ error, status: 201 });
     }
 }
