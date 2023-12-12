@@ -130,9 +130,9 @@ export default function auth() {
 				message={alertMessage}
 			/>
 			{loginPage ? (
-				<div className="w-[40%] absolute top-[15vh] left-[30%] flex flex-col items-center">
+				<div className="md:w-[40%] w-[96%] absolute top-[15vh] md:left-[30%] left-[2%] flex flex-col items-center">
 					<form
-						className="flex w-[50%] flex-col mx-auto my-4"
+						className="flex md:w-[50%] w-[90%] flex-col mx-auto my-4"
 						onSubmit={handleLogin}
 					>
 						<p className="text-black font-serif text-3xl font-bold my-4">
@@ -155,8 +155,8 @@ export default function auth() {
 							Login
 						</button>
 					</form>
-					<div className="w-[50%] my-2 h-[0.5px] bg-gray-300"></div>
-					<div className="w-[20%] my-2 flex justify-around flex-wrap">
+					<div className="md:w-[50%] w-[90%] my-2 h-[0.5px] bg-gray-300"></div>
+					<div className="md:w-[20%] w-[40%] my-2 flex justify-around flex-wrap">
 						<button
 							type="button"
 							className="bg-[#24292F] text-white hover:bg-[#24283F]/90 focus:ring-4 focus:outline-black focus:ring-[#24292F]/50 rounded-[50%] p-2 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 me-2 mb-2"
@@ -195,7 +195,7 @@ export default function auth() {
 							</svg>
 						</button>
 					</div>
-					<div className="w-[50%] my-2 h-[0.5px] bg-gray-300"></div>
+					<div className="md:w-[50%] w-[90%] my-2 h-[0.5px] bg-gray-300"></div>
 					<button
 						className="w-[40%] border border-transparent bg-white text-black hover:bg-black hover:text-white hover:border hover:border-black py-[5px] my-4 text-[12px] transition"
 						onClick={() => setLoginPage(false)}
@@ -204,9 +204,9 @@ export default function auth() {
 					</button>
 				</div>
 			) : (
-				<div className="w-[40%] absolute top-[15vh] left-[30%] flex flex-col items-center">
+				<div className="md:w-[40%] w-[90%] absolute top-[15vh] md:left-[30%] left-[5%] flex flex-col items-center">
 					<form
-						className="flex w-[50%] flex-col mx-auto my-4"
+						className="flex md:w-[50%] w-[90%] flex-col mx-auto my-4"
 						onSubmit={handleSubmit}
 					>
 						<p className="text-black font-serif text-3xl font-bold my-4">
