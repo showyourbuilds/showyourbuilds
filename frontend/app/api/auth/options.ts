@@ -20,19 +20,28 @@ export const authOptions: AuthOptions = {
 			async authorize(credentials: any) {
 				try {
 					await connect();
+					console.log(credentials);
 					const user = await User.findOne({
 						email: credentials.email,
 					});
 					if (user) {
+						console.log(credentials.password);
+						console.log(user.password);
 						const isPasswordCorrect = await bcrypt.compare(
 							credentials.password,
 							user.password
 						);
+						console.log("is password correct?" + isPasswordCorrect);
+						
 						if (isPasswordCorrect) {
+							console.log(user);
 							return user;
 						}
 					}
+					return null;
 				} catch (err: any) {
+					console.log(err);
+
 					throw new Error(err);
 				}
 			},
@@ -92,7 +101,8 @@ export const authOptions: AuthOptions = {
 			if (account) {
 				if (account.provider == "credentials") {
 					token.provider = "credentials";
-					token = { ...token };
+					token.accessToken = account.access_token;
+					console.log(token);
 				} else if (account.provider == "github") {
 					token.accessToken = account.accessToken;
 					token.provider = "github";
@@ -108,6 +118,7 @@ export const authOptions: AuthOptions = {
 				delete res.password;
 				session.user = res;
 				session.token = token;
+				console.log(session);
 				return session;
 			} else if (token.provider == "github") {
 				await connect();

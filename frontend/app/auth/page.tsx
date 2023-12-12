@@ -101,7 +101,7 @@ export default function auth() {
 				const loginres = await signIn("credentials", {
 					redirect: false,
 					email: user.email,
-					password: user.password,
+					password: password,
 				});
 				if (loginres?.error) {
 				setLoading(false);
