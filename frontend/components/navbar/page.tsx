@@ -47,7 +47,7 @@ export default function Navbar() {
 			</p>
 			<ul
 				id="toggle-ul"
-				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-10 absolute md:relative md:flex md:left-0 left-[-100vw] justify-around m-auto list-none pt-14 pl-8 md:p-0 items-center"
+				className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-30 absolute md:relative md:flex md:left-0 left-[-100vw] justify-around m-auto list-none pt-14 pl-8 md:p-0 items-center"
 			>
 				<li className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all">
 					<Link href={"/"} className="bg-transparent">
@@ -83,14 +83,14 @@ export default function Navbar() {
 					<>
 						<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
 							<a className="flex items-center">
-								<Notifications />
+								<Notifications notifications={[]} />
 							</a>
 							<div className="hidden md:block">
 								<MobileMenu user={session?.user} />
 							</div>
 							<div
 								id="menuIcon"
-								className="cursor-pointer bg-white md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-20"
+								className="cursor-pointer bg-white md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-40"
 								onClick={handleClick}
 							>
 								<div
