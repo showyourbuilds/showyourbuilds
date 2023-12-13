@@ -5,6 +5,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserPreview from "../UserPreview";
+import Notifications from "../Notifications";
+import MobileMenu from "../MobileMenu";
 export default function Navbar() {
 	const { data: session, status: sessionStatus } = useSession();
 	const isLoggedIn = sessionStatus === "authenticated" ? true : false;
@@ -37,7 +39,7 @@ export default function Navbar() {
 	const li = ["Home", "Explore"];
 	return (
 		<div className="flex w-[100%] max-w-[2000px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
-			<p className="md:w-[20%] w-[40%] m-auto flex justify-center items-center">
+			<p className="md:w-[20%] w-[40%] md:m-auto m-4 flex md:justify-center justify-start items-center">
 				<span className="py-2 font-serif">showmybuild</span>
 				<span className="bg-black border border-transparent text-white py-2 font-serif">
 					.cs
@@ -57,9 +59,8 @@ export default function Navbar() {
 						Explore
 					</Link>
 				</li>
-				<li className="mx-4 md:hidden flex items-center bg-transparent my-8 hover:bg-gray-500 hover:p-4 transition-all">
-					<i className="fa-solid fa-user-circle text-[2.5rem] bg-transparent text-white"></i>
-					<p className="bg-transparent text-white mx-4">user</p>
+				<li className="mx-4 md:hidden flex text-white items-center bg-transparent my-8 hover:bg-gray-500 hover:p-4 transition-all">
+					<UserPreview user={session?.user} />
 				</li>
 				<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-black my-8 md:my-0">
 					<Link
@@ -72,41 +73,20 @@ export default function Navbar() {
 					</Link>
 				</li>
 			</ul>
-			<div className="w-[40%] md:w-[60%] flex justify-between items-center">
+			<div className="w-[40%] lg:w-[60%] flex justify-between items-center">
 				<input
 					type="text"
-					className="hidden md:flex md:w-[50%] h-[45%] px-8 outline-none rounded-[50px] bg-gray-200"
+					className="hidden lg:flex lg:w-[50%] h-[45%] px-8 outline-none rounded-[50px] bg-gray-200"
 					placeholder="Search.."
 				/>
 				{isLoggedIn ? (
 					<>
-						<div className="w-[80%] md:min-w-[140px] md:w-[45%] flex items-center justify-around">
+						<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
 							<a className="flex items-center">
-								<i className="fa-solid fa-bell text-[1rem] md:text-[1.5rem] cursor-pointer"></i>
-								<div className="w-[10%] h-[10%] bg-red-500 rounded-full flex justify-center items-cblack font-bold"></div>
+								<Notifications />
 							</a>
-							{/* <Link href={"/profile/dummyuser"}>
-								<div className="md:flex items-center hidden cursor-pointer mx-4 hover:border transition px-2 py-4 rounded-md">
-									{session?.user?.image ? (
-										<img
-											src={session?.user?.image}
-											alt=""
-											width={"34px"}
-											className="rounded-full"
-										/>
-									) : (
-										<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
-									)}
-									<p className="text-[15px] text-gray-500 font-sans mx-2">
-										{session?.user?.name}
-									</p>
-								</div>
-							</Link> */}
-							<UserPreview user={session?.user} />
-							<div className="md:block hidden cursor-pointer">
-								<div className="md:min-w-[140px] flex items-center">
-									<button onClick={() => signOut()} className='border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4'>Logout</button>
-								</div>
+							<div className="hidden md:block">
+								<MobileMenu user={session?.user} />
 							</div>
 							<div
 								id="menuIcon"

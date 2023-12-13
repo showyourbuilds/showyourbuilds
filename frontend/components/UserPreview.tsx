@@ -16,7 +16,7 @@ export default function UserPreview({ user }: { user: any }) {
 					<i className="fa-solid fa-user-circle text-[1.5rem] md:text-[2rem]"></i>
 				)}
 				<span className="ml-2 text-sm font-semibold font-sans">
-					{user.name}
+					{user?.name}
 				</span>
 			</div>
 		</Link>
