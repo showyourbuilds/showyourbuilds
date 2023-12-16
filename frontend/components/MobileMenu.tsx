@@ -1,5 +1,6 @@
-// components/Dropdown.js
+"use client"
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const MobileMenu = ({ user }: { user: any }) => {
@@ -8,14 +9,20 @@ const MobileMenu = ({ user }: { user: any }) => {
 	const toggleDropdown = () => {
 		setIsOpen(!isOpen);
 	};
-
+	const handleLogout = () => {
+		console.log("logout");
+		setIsOpen(false);
+		signOut();
+	};
 	return (
 		<div className="relative inline-block text-left">
 			<div>
 				<button
 					type="button"
 					onClick={toggleDropdown}
-					onBlur={() => setIsOpen(false)}
+					onBlur={() => setTimeout(() => {
+						setIsOpen(false)
+					}, 1000)}
 					className="flex justify-center w-full p-4 text-sm font-medium"
 				>
 					<div className="flex m-2 items-center">
@@ -41,33 +48,22 @@ const MobileMenu = ({ user }: { user: any }) => {
 					<div
 						className="py-1"
 						role="menu"
-						aria-orientation="vertical"
-						aria-labelledby="options-menu"
 					>
 						<div aria-label="navigation" className="py-2">
 							<nav className="grid gap-1">
-								<a
-									href="/"
+								<Link
+									href={`/profile/${user?._id}`}
 									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
 								>
-									<span>Account Settings</span>
-								</a>
-								
-								
-								<a
-									href="/"
-									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-								>
-									<span>Contact Us</span>
-								</a>
+									<span>Account</span>
+								</Link>
 							</nav>
 						</div>
 						
 						<div aria-label="footer" className="pt-2">
 							<button
-								type="button"
 								className="flex items-center space-x-3 py-3 px-4 w-full leading-6 text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-                                onClick={() => signOut()} 
+                                onClick={handleLogout} 
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +90,6 @@ const MobileMenu = ({ user }: { user: any }) => {
 								<span>Logout</span>
 							</button>
 						</div>
-						{/* Add more items as needed */}
 					</div>
 				</div>
 			)}
@@ -103,3 +98,4 @@ const MobileMenu = ({ user }: { user: any }) => {
 };
 
 export default MobileMenu;
+	

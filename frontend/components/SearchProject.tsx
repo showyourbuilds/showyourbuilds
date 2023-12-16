@@ -26,7 +26,7 @@ export default function SearchProject() {
 			/>
 			<input
 				type="text"
-				className="flex md:hidden my-4 w-full mx-auto py-2 px-8 outline-none rounded-[50px] bg-gray-200"
+				className="flex md:hidden my-4 w-full mx-auto py-2 px-8 outline-none rounded-[50px]"
 				placeholder="Search.."
 			/>
             <span className="absolute md:hidden right-4 p-2 cursor-pointer" onClick={() => handleSearch()}><img src="/assets/magnifying-glass.png" width={20} height={20} alt="" /></span>

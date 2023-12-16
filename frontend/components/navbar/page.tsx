@@ -1,6 +1,6 @@
 "use client";
 import { setMode } from "@/redux/features/authSlice";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,16 +16,16 @@ export default function Navbar() {
 	const toggleMode = () => {
 		dispatch(setMode());
 	};
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setisMenuOpen] = useState(false);
 	const handleClick = () => {
-		if (!isOpen) {
+		if (!isMenuOpen) {
 			document
 				.getElementById("toggle-ul")
 				?.classList.replace("left-[-100vw]", "left-[0]");
 			document
 				.getElementById("toggle-ul")
 				?.classList.replace("rounded-br-[50%]", "rounded-br-[0]");
-			setIsOpen(!isOpen);
+			setisMenuOpen(!isMenuOpen);
 		} else {
 			document
 				.getElementById("toggle-ul")
@@ -33,17 +33,18 @@ export default function Navbar() {
 			document
 				.getElementById("toggle-ul")
 				?.classList.replace("rounded-br-[0]", "rounded-br-[50%]");
-			setIsOpen(!isOpen);
+			setisMenuOpen(!isMenuOpen);
 		}
 	};
 	const li = ["Home", "Explore"];
 	return (
 		<div className="flex w-[100%] max-w-[2000px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
 			<p className="md:w-[20%] w-[40%] md:m-auto m-4 flex md:justify-center justify-start items-center">
-				<span className="py-2 font-serif">showmybuild</span>
-				<span className="bg-black border border-transparent text-white py-2 font-serif">
-					.cs
-				</span>
+				<img
+					src="/assets/show.png"
+					alt=""
+					className="w-full h-[100%]"
+				/>
 			</p>
 			<ul
 				id="toggle-ul"
@@ -76,55 +77,53 @@ export default function Navbar() {
 			<div className="w-[40%] lg:w-[60%] flex justify-between items-center">
 				<input
 					type="text"
-					className="hidden lg:flex lg:w-[50%] h-[45%] px-8 outline-none rounded-[50px] bg-gray-200"
+					className="hidden lg:flex lg:w-[50%] h-[45%] px-8 outline-none rounded-[50px]"
 					placeholder="Search.."
 				/>
 				{isLoggedIn ? (
-					<>
-						<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
-							<a className="flex items-center">
-								<Notifications notifications={[]} />
-							</a>
-							<div className="hidden md:block">
-								<MobileMenu user={session?.user} />
-							</div>
-							<div
-								id="menuIcon"
-								className="cursor-pointer bg-white md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-40"
-								onClick={handleClick}
-							>
-								<div
-									id="bar1"
-									className={`w-5 h-1 bg-black mb-1 transition-transform duration-300 ${
-										isOpen
-											? "transform rotate-45 translate-x-1 translate-y-2"
-											: ""
-									}`}
-								></div>
-								<div
-									id="bar2"
-									className={`w-5 h-1 bg-black mb-1 transition-opacity duration-300 ${
-										isOpen ? "opacity-0" : ""
-									}`}
-								></div>
-								<div
-									id="bar3"
-									className={`w-5 h-1 bg-black transition-transform duration-300 ${
-										isOpen
-											? "transform -rotate-45 translate-x-1 -translate-y-2"
-											: ""
-									}`}
-								></div>
-							</div>
+					<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
+						<a className="flex items-center">
+							<Notifications notifications={[]} />
+						</a>
+						<div className="hidden md:block">
+							<MobileMenu user={session?.user} />
 						</div>
-					</>
+						<div
+							id="menuIcon"
+							className="cursor-pointer bg-white md:hidden flex flex-col justify-around items-center py-4 pl-3 pr-4 z-40"
+							onClick={handleClick}
+						>
+							<div
+								id="bar1"
+								className={`w-5 h-1 bg-black mb-1 transition-transform duration-300 ${
+									isMenuOpen
+										? "transform rotate-45 translate-x-1 translate-y-2"
+										: ""
+								}`}
+							></div>
+							<div
+								id="bar2"
+								className={`w-5 h-1 bg-black mb-1 transition-opacity duration-300 ${
+									isMenuOpen ? "opacity-0" : ""
+								}`}
+							></div>
+							<div
+								id="bar3"
+								className={`w-5 h-1 bg-black transition-transform duration-300 ${
+									isMenuOpen
+										? "transform -rotate-45 translate-x-1 -translate-y-2"
+										: ""
+								}`}
+							></div>
+						</div>
+					</div>
 				) : (
 					<>
 						<div className="w-[80%] md:min-w-[140px] md:w-[20%] flex items-center">
-							<Link
-								href={"/auth"}
-							>
-								<button className='border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4'>Login</button>
+							<Link href={"/auth"}>
+								<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4">
+									Login
+								</button>
 							</Link>
 						</div>
 					</>

@@ -58,6 +58,11 @@ export const authOptions: AuthOptions = {
 					image: profile.avatar_url,
 				};
 			},
+			authorization: {
+				params: {
+					scope: "repo user:email",
+				}
+			}
 		}),
 	],
 	session: {
@@ -68,7 +73,7 @@ export const authOptions: AuthOptions = {
 			user,
 			account,
 		}: {
-			user: AuthUser | AdapterUser;
+			user: AuthUser | any;
 			account: Account | null;
 		}) {
 			if (account?.provider == "credentials") {
@@ -79,10 +84,13 @@ export const authOptions: AuthOptions = {
 					const existingUser = await User.findOne({
 						email: user.email as string,
 					});
+					console.log(user);
+					
 					if (!existingUser) {
 						const newUser = new User({
 							name: user.name as string,
-							email: user.email as string,
+							username: user?.username as string,
+							email: user?.email as string || "",
 							provider: "github",
 						});
 						await newUser.save();
@@ -104,11 +112,14 @@ export const authOptions: AuthOptions = {
 					token.accessToken = account.access_token;
 					console.log(token);
 				} else if (account.provider == "github") {
-					token.accessToken = account.accessToken;
+					token.accessToken = account.access_token;
 					token.provider = "github";
+					token.username = account?.username;
 					token.id = profile?.sub;
 				}
 			}
+			console.log(token);
+			
 			return token;
 		},
 		async session({ session, token }: { session: any; token: JWT }) {
@@ -128,6 +139,7 @@ export const authOptions: AuthOptions = {
 				if (!res) {
 					const newUser = new User({
 						name: token.name as string,
+						username: token.username as string,
 						email: token.email as string,
 						provider: "github",
 						image: token.picture as string,
@@ -135,6 +147,8 @@ export const authOptions: AuthOptions = {
 					await newUser.save();
 					session.user = newUser;
 					session.token = token;
+					console.log(session);
+					
 					return session;
 				} else {
 					delete res.password;

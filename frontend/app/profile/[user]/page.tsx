@@ -84,6 +84,11 @@ export default function User({ params }: { params: { user: string } }) {
 						/>
 					</div>
 				</div>
+				<Link href={'/projects/createproject'}>
+					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
+						Edit Profile
+					</button>
+				</Link>
 			</div>
 			<div className="w-[50%] my-2 h-[0.5px] mx-auto bg-gray-300"></div>
 			<div
