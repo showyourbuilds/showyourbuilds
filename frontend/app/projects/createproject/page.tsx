@@ -310,13 +310,14 @@ export default function CreateProject() {
 				onClose={closeAlert}
 				message={alertMessage}
 			/>
-			<div className="w-[50%] mx-auto flex">
-				<img src={snapshots[0]?.preview || ""} alt="" />
-			</div>
-			<div className="md:w-[50%] w-[90%] flex flex-col mx-auto my-4">
+			<div className="md:w-[50%] w-[90%] flex flex-col mx-auto my-8">
 				<h1 className="text-[2rem] font-bold font-serif">
 					Create Project
 				</h1>
+				<div className={`w-full mx-auto my-4 flex-col ${snapshots.length > 0 ? "flex" : "hidden"}`}>
+					<p className="text-gray-500 my-2 font-sans font-thin">Project's Snapshot</p>
+					<img className="md:w-[50%] w-full" src={snapshots[0]?.preview || ""} alt="" />
+				</div>
 				<Dropzone
 					accept={"image/jpeg, image/jpg, image/png" as any}
 					onDrop={(acceptedFiles: any) => {
@@ -352,15 +353,14 @@ export default function CreateProject() {
 					}}
 				>
 					{({ getRootProps, getInputProps }) => (
-						<section>
+						<section className="my-4">
 							<div
 								{...getRootProps()}
 								className="border-2 border-dashed border-gray-400 rounded-md p-4 my-4"
 							>
 								<input {...getInputProps()} />
 								<p className="text-xl font-semibold text-gray-400">
-									Drag 'n' drop Project's snapshot here, or
-									click to select file
+									{snapshots[0]?.name || "Drag 'n' drop Project's snapshot here, or click to select file"}
 								</p>
 							</div>
 						</section>
@@ -377,7 +377,7 @@ export default function CreateProject() {
 				<textarea
 					className="text-xl border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-semibold font-sans my-6"
 					placeholder="Enter Project Description"
-					rows={5}
+					rows={3}
 					cols={20}
 					style={{ resize: "none" }}
 					onChange={(e) => {
