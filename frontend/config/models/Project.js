@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const projectSchema = new mongoose.Schema({
-    name: {
+    title: {
         type: String,
         required: true,
     },
@@ -15,9 +15,14 @@ const projectSchema = new mongoose.Schema({
     },
     highlightedFeatures: {
         type: [String],
+        default: '',
     },
     techStack: {
-        type: [String],
+        type: [{
+            label: String,
+            value: String
+        }],
+        default: [],
     },
     links: {
         type: [{
@@ -35,6 +40,7 @@ const projectSchema = new mongoose.Schema({
     },
     duration: {
         type: String,
+        default: '',
     },
     likes: {
         type: Number,
@@ -42,12 +48,15 @@ const projectSchema = new mongoose.Schema({
     },
     snapshots: {
         type: [String],
+        default: [""]
     },
     sponsors: {
         type: [String],
+        default: [""]
     },
+}, {
+    timestamps: true,
+
 });
 
-const Project = mongoose.model('Project', projectSchema);
-
-module.exports = Project;
+export default mongoose.models.Project || mongoose.model("Project", projectSchema);

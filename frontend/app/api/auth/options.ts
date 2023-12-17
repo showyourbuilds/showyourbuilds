@@ -118,8 +118,6 @@ export const authOptions: AuthOptions = {
 					token.id = profile?.sub;
 				}
 			}
-			console.log(token);
-			
 			return token;
 		},
 		async session({ session, token }: { session: any; token: JWT }) {
@@ -129,7 +127,6 @@ export const authOptions: AuthOptions = {
 				delete res.password;
 				session.user = res;
 				session.token = token;
-				console.log(session);
 				return session;
 			} else if (token.provider == "github") {
 				await connect();
@@ -147,8 +144,6 @@ export const authOptions: AuthOptions = {
 					await newUser.save();
 					session.user = newUser;
 					session.token = token;
-					console.log(session);
-					
 					return session;
 				} else {
 					delete res.password;
