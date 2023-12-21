@@ -1,10 +1,13 @@
+import connect from '@/config/db';
 import Project from '@/config/models/Project';
 import { NextResponse } from 'next/server';
 
 // edit the project
 export const POST = async (req: any) => {
-    const { body } = req;
-    const project = await editProject(body);
+    await connect();
+    const { newProject } = await req.json();
+    console.log(newProject);
+    const project = await editProject(newProject);
     if (project) {
         return NextResponse.json({ project: project, status: 200 });
     } else {
@@ -12,8 +15,8 @@ export const POST = async (req: any) => {
     }
 }
 
-async function editProject(body: any) {
-    const editedProject = body.project;
+async function editProject(newProject: any) {
+    const editedProject = newProject;
     const project = await Project.findOneAndUpdate({ _id: editedProject._id }, { $set: editedProject }, { new: true });
     if (project) {
         return project;

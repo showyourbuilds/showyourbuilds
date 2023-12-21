@@ -4,11 +4,13 @@ import UserPreview from "./UserPreview";
 import TechStack from "./TechStack";
 import { useRouter } from "next/navigation";
 import LinksBar from "./LinksBar";
+import { useSession } from "next-auth/react";
 
 export default function ProjectCard({ item, key }: { item: any; key: any }) {
 	const [isLiked, setLiked] = useState(false);
 	const [moreMenu, setMoreMenu] = useState(false);
 	const router = useRouter();
+	const { data:session } = useSession() as any;
 	const handleLike = () => {
 		setLiked(!isLiked);
 	};
@@ -28,7 +30,12 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const handleEditProject = async () => {
+		router.push(`/projects/editproject/${item._id}`);
 	}
+
 	return (
 		<div
 			key={key}
@@ -52,13 +59,13 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 					<img src="/assets/like.png" alt="" width={30} />
 				</div>
 			)} */}
-			<div className="p-2 flex items-center absolute right-4 top-4 bg-white rounded-[30px] cursor-pointer" onClick={() => {
+			<div className={`p-2 ${session?.user?._id === item?.owner?._id} items-center absolute right-4 top-4 bg-white rounded-[30px] cursor-pointer`} onClick={() => {
 				setMoreMenu(!moreMenu)
 			}}>
 				<img src="/assets/more.png" width={20} alt="" />
 			</div>
 			<div className={`p-2 ${moreMenu ? "flex" : "hidden"} absolute right-4 top-14 bg-white rounded-lg`}>
-				<button className="p-2 mx-2"><img src="/assets/edit-button.png" width={20} alt="" /></button>
+				<button className="p-2 mx-2" onClick={handleEditProject}><img src="/assets/edit-button.png" width={20} alt="" /></button>
 				<button className="p-2 mx-2" onClick={handleDeleteProject}><img src="/assets/delete.png" width={20} alt="" /></button>
 				<button className="p-2 mx-2"><img src="/assets/bookmark.png" width={20} alt="" /></button>
 			</div>
