@@ -2,7 +2,7 @@ import Project from "@/config/models/Project";
 import { NextResponse } from "next/server";
 
 export const GET = async (req: any) => {
-	const searchParams = new URL(req.url) as any;
+	const { searchParams } = new URL(req.url);
 	const id = searchParams.get("id");
 	const projects = await Project.find({ owner: id });
     if (projects.length > 0) {

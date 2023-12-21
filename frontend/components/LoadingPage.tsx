@@ -16,14 +16,14 @@ const LoadingPage = () => {
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
-				backgroundColor: "rgba(0, 0, 0, 0.8)",
+				backgroundColor: "rgba(0, 0, 0, 1)",
 				zIndex: 9999,
 			}}
 		>
 			<div className="flex flex-row gap-2">
-				<div className="w-6 h-6 rounded-full bg-blue-500 mx-2 animate-bounce [animation-delay:.5s]"></div>
+				<div className="w-6 h-6 rounded-full bg-blue-500 mx-2 animate-bounce [animation-delay:.2s]"></div>
 				<div className="w-6 h-6 rounded-full bg-blue-500 mx-2 animate-bounce [animation-delay:.3s]"></div>
-				<div className="w-6 h-6 rounded-full bg-blue-500 mx-2 animate-bounce [animation-delay:.5s]"></div>
+				<div className="w-6 h-6 rounded-full bg-blue-500 mx-2 animate-bounce [animation-delay:.2s]"></div>
 			</div>
 		</div>
 	);

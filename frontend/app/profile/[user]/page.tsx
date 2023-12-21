@@ -1,13 +1,14 @@
 "use client";
 import ProjectCard from "@/components/ProjectCard";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
-import React from "react";
-import data from "@/public/dummyproducts.json";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import LoadingPage from "@/components/LoadingPage";
 export default function User({ params }: { params: { user: string } }) {
 	const { data: session } = useSession();
-	console.log(session);
+	const [projects, setProjects] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const user = session?.user as any;
 	const profileBtns = () => {
 		if (params.user === user?._id) {
@@ -26,8 +27,34 @@ export default function User({ params }: { params: { user: string } }) {
 			);
 		}
 	};
+	useEffect(() => {
+		setLoading(true);
+		async function getData() {
+			try {
+				const data = await fetch(`/api/projects/getuserProjects?id=${params.user}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+				});
+				const res = await data.json();
+				if (res.status === 200) {
+					console.log(res.projects);
+					setProjects(res.projects);
+					setLoading(false);
+				}
+			} catch (error) {
+				console.log(error);
+				setLoading(false);
+			}
+		}
+		getData();
+	}, [params]);
 	return (
 		<ComposedLayout>
+			<div className={`${loading ? "block" : "hidden"}`}>
+				<LoadingPage />
+			</div>
 			<div className="md:w-[50%] w-[90%] mx-auto my-4">
 				<div className="w-full aspect-[3/1] relative" id="header">
 					<img src="/assets/header.jpeg" className="w-full" alt="" />
@@ -86,19 +113,23 @@ export default function User({ params }: { params: { user: string } }) {
 				</div>
 				<Link href={'/projects/createproject'}>
 					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
-						Edit Profile
+						Create Project
 					</button>
 				</Link>
 			</div>
 			<div className="w-[50%] my-2 h-[0.5px] mx-auto bg-gray-300"></div>
-			<div
-				className="md:w-[70%] w-[90%] mx-auto flex flex-col"
-				id="projects"
-			>
-				{data.slice(0, 1).map((item) => (
-					<ProjectCard item={item} key={item.id} />
-				))}
-			</div>
+			{projects.length > 0 ? 
+				<div
+					className="md:w-[70%] w-[90%] mx-auto flex flex-col"
+					id="projects"
+				>
+					{projects.map((item: any) => (
+						<ProjectCard item={item} key={item._id} />
+					))}
+				</div>
+				:
+				<p>No projects to display here, add some project's for people to see them</p>
+			}
 		</ComposedLayout>
 	);
 }

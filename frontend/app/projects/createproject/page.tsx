@@ -156,6 +156,12 @@ const options = [
 	{ value: "windows", label: "Windows" },
 	{ value: "macos", label: "MacOS" },
 ];
+
+const linkOptions = [
+	{ value: "twitter", label: "Twitter" },
+	{ value: "instagram", label: "Instagram" },
+	{ value: "facebook", label: "facebook" },
+];
 const animatedComponents = makeAnimated();
 
 export default function CreateProject() {
@@ -183,6 +189,9 @@ export default function CreateProject() {
 	const [repository, setRepository] = useState({} as any);
 	const [links, setLinks] = useState(
 		[] as { website: string; link: string }[]
+	);
+	const [moreLinks, setMoreLinks] = useState(
+		[] as { value: string; label: string }[]
 	);
 
 	async function calculateLastUpdatedTime(updatedAt: string) {
@@ -254,46 +263,53 @@ export default function CreateProject() {
 				storage,
 				`projectSnapshots/${session?.user?.username}/${repository?.name}`
 			);
-			uploadBytes(projectRef, snapshots[0]).then((response) => {
-				const imgLinkRef = ref(
-					storage,
-					`${response.metadata.fullPath}`
-				);
-				getDownloadURL(imgLinkRef).then(async (url) => {
-					const project = await fetch(`/api/projects/addProject`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-						body: JSON.stringify({
-							title: title,
-							desc: description,
-							links: links,
-							snapshots: [url],
-							techStack: stack,
-							duration: lastUpdated,
-							owner: session?.user?._id,
-						}),
-					});
-					if (project.status === 200) {
-						setLoading(false);
-						router.push(`/profile/${session?.user?._id}`);
-					} else {
-						setLoading(false);
-						setAlertMessage(
-							"Some error occured, please try again later."
-						);
-						openAlert();
-					}
-				}).catch((error) => {
+			uploadBytes(projectRef, snapshots[0])
+				.then((response) => {
+					const imgLinkRef = ref(
+						storage,
+						`${response.metadata.fullPath}`
+					);
+					getDownloadURL(imgLinkRef)
+						.then(async (url) => {
+							const project = await fetch(
+								`/api/projects/addProject`,
+								{
+									method: "POST",
+									headers: {
+										"Content-Type": "application/json",
+										Accept: "application/json",
+									},
+									body: JSON.stringify({
+										title: title,
+										desc: description,
+										links: links,
+										snapshots: [url],
+										techStack: stack,
+										duration: lastUpdated,
+										owner: session?.user?._id,
+									}),
+								}
+							);
+							if (project.status === 200) {
+								setLoading(false);
+								router.push(`/profile/${session?.user?._id}`);
+							} else {
+								setLoading(false);
+								setAlertMessage(
+									"Some error occured, please try again later."
+								);
+								openAlert();
+							}
+						})
+						.catch((error) => {
+							console.log(error);
+							setLoading(false);
+						});
+				})
+				.catch((error) => {
 					console.log(error);
 					setLoading(false);
 				});
-			}).catch((error) => {
-				console.log(error);
-				setLoading(false);
-			})
 		} catch (error) {
 			console.log(error);
 			setLoading(false);
@@ -314,9 +330,19 @@ export default function CreateProject() {
 				<h1 className="text-[2rem] font-bold font-serif">
 					Create Project
 				</h1>
-				<div className={`w-full mx-auto my-4 flex-col ${snapshots.length > 0 ? "flex" : "hidden"}`}>
-					<p className="text-gray-500 my-2 font-sans font-thin">Project's Snapshot</p>
-					<img className="md:w-[50%] w-full" src={snapshots[0]?.preview || ""} alt="" />
+				<div
+					className={`w-full mx-auto my-4 flex-col ${
+						snapshots.length > 0 ? "flex" : "hidden"
+					}`}
+				>
+					<p className="text-gray-500 my-2 font-sans font-thin">
+						Project's Snapshot
+					</p>
+					<img
+						className="md:w-[50%] w-full"
+						src={snapshots[0]?.preview || ""}
+						alt=""
+					/>
 				</div>
 				<Dropzone
 					accept={"image/jpeg, image/jpg, image/png" as any}
@@ -338,7 +364,6 @@ export default function CreateProject() {
 								)
 							);
 							console.log(snapshots);
-							
 						} else {
 							setAlertMessage(
 								"Invalid file type. Please upload only JPG, JPEG, or PNG files."
@@ -360,7 +385,8 @@ export default function CreateProject() {
 							>
 								<input {...getInputProps()} />
 								<p className="text-xl font-semibold text-gray-400">
-									{snapshots[0]?.name || "Drag 'n' drop Project's snapshot here, or click to select file"}
+									{snapshots[0]?.name ||
+										"Drag 'n' drop Project's snapshot here, or click to select file"}
 								</p>
 							</div>
 						</section>
@@ -368,15 +394,15 @@ export default function CreateProject() {
 				</Dropzone>
 				<input
 					type="text"
-					className="text-xl border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-semibold font-sans my-6"
-					placeholder="Enter Project title"
+					className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-semibold font-sans my-6"
+					placeholder="Enter Project's title"
 					onChange={(e) => {
 						setTitle(e.target.value);
 					}}
 				/>
 				<textarea
-					className="text-xl border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-semibold font-sans my-6"
-					placeholder="Enter Project Description"
+					className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-semibold font-sans my-6"
+					placeholder="Enter Project's Description"
 					rows={3}
 					cols={20}
 					style={{ resize: "none" }}
@@ -391,7 +417,7 @@ export default function CreateProject() {
 					styles={{
 						input: (provided) => ({
 							...provided,
-							color: "gray",
+							color: "#374151",
 							boxShadow: "none",
 							fontWeight: "thin",
 							"& > input:focus": {
@@ -410,7 +436,7 @@ export default function CreateProject() {
 						}),
 					}}
 					className={
-						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-4"
+						"border-b-gray-200 focus:shadow-none text-gray-500 font-sans my-8"
 					}
 					options={options}
 					placeholder="Choose the tech used in your project...."
@@ -423,7 +449,7 @@ export default function CreateProject() {
 					styles={{
 						input: (provided) => ({
 							...provided,
-							color: "gray",
+							color: "#374151",
 							boxShadow: "none",
 							fontWeight: "thin",
 							"& > input:focus": {
@@ -452,11 +478,10 @@ export default function CreateProject() {
 						}),
 					}}
 					className={
-						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-4"
+						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
 					}
 					options={repos}
-					defaultValue={"Select a Repository...."}
-					placeholder="Select a Repository...."
+					placeholder="Select Project's Repository...."
 					onChange={(e: any) => {
 						console.log(e);
 						setRepository(e);
@@ -466,8 +491,78 @@ export default function CreateProject() {
 						]);
 					}}
 				/>
+				<Select
+					components={animatedComponents}
+					styles={{
+						input: (provided) => ({
+							...provided,
+							color: "#374151",
+							boxShadow: "none",
+							fontWeight: "thin",
+							"& > input:focus": {
+								boxShadow: "none",
+							},
+						}),
+						control: (provided) => ({
+							...provided,
+							border: "none",
+							color: '#374151',
+							borderRadius: "none",
+							borderBottom: "1px solid rgb(229, 231, 235)",
+							boxShadow: "none",
+							":focus": {
+								boxShadow: "none",
+							},
+						}),
+						option: (provided) => ({
+							...provided,
+							color: "gray",
+							backgroundColor: "white",
+							boxShadow: "none",
+							fontWeight: "thin",
+							":focus": {
+								boxShadow: "none",
+							},
+						}),
+					}}
+					isMulti
+					className={
+						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
+					}
+					options={linkOptions}
+					placeholder="Add more links to your Project"
+					onChange={(e: any) => {
+						console.log(e);
+						setMoreLinks(e);
+					}}
+				/>
+				{moreLinks.length > 0 ? (
+					<>
+						{moreLinks.map((link) => (
+							<div className="flex items-center my-2 w-[50%]">
+								<input
+									type="text"
+									className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-thin font-sans my-6 w-[90%]"
+									placeholder={`Enter ${link.label} link`}
+									onChange={(e) => {
+										setLinks([
+											...links,
+											{
+												website: link.value,
+												link: e.target.value,
+											},
+										]);
+									}}
+								/>
+								<img src="/assets/link.png" className="w-[5%]" alt="" />
+							</div>
+						))}
+					</>
+				) : (
+					<></>
+				)}
 				<button
-					className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4"
+					className="w-[30%] min-w-[50px] border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4 my-4"
 					onClick={handleAddProject}
 				>
 					Add Project

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TechStack({ stack }: { stack: Array<string> }) {
+export default function TechStack({ stack }: { stack: Array<{label: string, value: string}> }) {
 	var a = 1;
 	return (
 		<div className="flex flex-col justify-between px-4 items-center">
@@ -11,7 +11,7 @@ export default function TechStack({ stack }: { stack: Array<string> }) {
 				{stack.map((item) => {
 					return (
 						<div key={a++} className="border rounded-lg py-1 px-3 my-1 mx-2 min-w-[40px]">
-							<span className="text-[12px]">{item}</span>
+							<span className="text-[12px]">{item.label}</span>
 						</div>
 					);
 				})}
