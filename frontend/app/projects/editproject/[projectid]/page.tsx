@@ -237,11 +237,11 @@ export default function CreateProject({ params }: { params: any }) {
 		return lastUpdated.toLocaleDateString("en-US", options);
 	}
 
-	// useEffect(() => {
-	// 	if (!session) {
-	// 		router.push("/");
-	// 	}
-	// });
+	useEffect(() => {
+		if (!session) {
+			router.push("/");
+		}
+	}, []);
 
 	useEffect(() => {
 		async function getProject() {
