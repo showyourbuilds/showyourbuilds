@@ -19,6 +19,7 @@ export default function EditProfile() {
 		editedUser.name = name;
 		editedUser.username = username;
 		editedUser.bio = bio;
+		editedUser.bookmarks = [];
 		const res = await fetch("/api/profile", {
 			method: "POST",
 			headers: {

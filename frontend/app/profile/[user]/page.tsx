@@ -42,6 +42,9 @@ export default function User({ params }: { params: { user: string } }) {
 					console.log(res.projects);
 					setProjects(res.projects);
 					setLoading(false);
+				} else {
+					console.log(res);
+					setLoading(false);
 				}
 			} catch (error) {
 				console.log(error);

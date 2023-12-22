@@ -5,15 +5,20 @@ import TechStack from "./TechStack";
 import { useRouter } from "next/navigation";
 import LinksBar from "./LinksBar";
 import { useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleBookmark } from "@/redux/features/authSlice";
 
 export default function ProjectCard({ item, key }: { item: any; key: any }) {
 	const [isLiked, setLiked] = useState(false);
 	const [moreMenu, setMoreMenu] = useState(false);
+	const isBookmarked = useSelector((state: any) => state.bookmarks.includes(item._id));
+	const [bookmarked, setBookmarked] = useState(isBookmarked || false);
 	const router = useRouter();
 	const { data:session } = useSession() as any;
 	const handleLike = () => {
 		setLiked(!isLiked);
 	};
+	const dispatch = useDispatch();
 	const handleDeleteProject = async () => {
 		try {
 			const data = await fetch(`/api/projects/deleteProject?id=${item._id}`, {
@@ -36,6 +41,14 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 		router.push(`/projects/editproject/${item._id}`);
 	}
 
+	const handleBookmarkProject = async () => {
+		try {
+			dispatch(handleBookmark({bookmark: item._id}));
+			setBookmarked((prev: boolean) => !prev);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	return (
 		<div
 			key={key}
@@ -67,7 +80,14 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 			<div className={`p-2 ${moreMenu ? "flex" : "hidden"} absolute right-4 top-14 bg-white rounded-lg`}>
 				<button className="p-2 mx-2" onClick={handleEditProject}><img src="/assets/edit-button.png" width={20} alt="" /></button>
 				<button className="p-2 mx-2" onClick={handleDeleteProject}><img src="/assets/delete.png" width={20} alt="" /></button>
-				<button className="p-2 mx-2"><img src="/assets/bookmark.png" width={20} alt="" /></button>
+				<button className="p-2 mx-2" onClick={handleBookmarkProject}>
+					{bookmarked 
+					?
+					<img src="/assets/bookmarked.png" width={20} alt="" />
+					:
+					<img src="/assets/bookmark.png" width={20} alt="" />
+					}
+				</button>
 			</div>
 			<div className="w-full h-fit rounded-t-lg">
 				<img

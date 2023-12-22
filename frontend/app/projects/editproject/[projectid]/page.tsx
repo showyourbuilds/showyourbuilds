@@ -187,11 +187,7 @@ export default function CreateProject({ params }: { params: any }) {
 	const [description, setDescription] = useState("" as string);
 	const [repository, setRepository] = useState({} as any);
 	const [links, setLinks] = useState(
-		[] as { website: string; link: string }[]
-	);
-	const [moreLinks, setMoreLinks] = useState(
-		oldProject?.links?.filter((link: any) => link.website !== "github") ||
-			[] as { value: string; label: string }[]
+		[] as { label: string; link: string }[]
 	);
 
 	async function calculateLastUpdatedTime(updatedAt: string) {
@@ -230,9 +226,12 @@ export default function CreateProject({ params }: { params: any }) {
 				const data = await project.json();
 				if (data.status === 200) {
 					setOldProject(data.project);
-					// if (session?.user?._id !== data.project.owner) {
-					// 	router.push(`/profile/${session?.user?._id}`);
-					// }
+					setTitle(data.project.title);
+					setDescription(data.project.desc);
+					setStack(data.project.techStack);
+					setLinks(data.project.links);
+					setRepository(data.project.links[0]);
+					setSnapshots(data.project.snapshots);
 				}
 			} catch (error) {
 				console.log(error);
@@ -284,6 +283,14 @@ export default function CreateProject({ params }: { params: any }) {
 		}
 		getRepositories();
 	}, [session]);
+
+	const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>, label: string) => {
+		const updatedLinks = links.map((link) =>
+		  link.label === label ? { ...link, link: e.target.value } : link
+		);
+		setLinks(updatedLinks);
+	  };
+	  
 
 	const handleEditProject = async () => {
 		setLoading(true);
@@ -363,7 +370,6 @@ export default function CreateProject({ params }: { params: any }) {
 				<h1 className="text-[2rem] font-bold font-serif">
 					Edit Project
 				</h1>
-				{snapshots[0] !== undefined ? (
 					<div className={`w-full mx-auto my-4 flex flex-col`}>
 						<p className="text-gray-500 my-2 font-sans font-thin">
 							Project's Snapshot
@@ -371,25 +377,11 @@ export default function CreateProject({ params }: { params: any }) {
 						<img
 							className="md:w-[50%] w-full"
 							src={
-								snapshots[0]?.preview
+								snapshots[0]?.preview || snapshots[0] 
 							}
 							alt=""
 						/>
 					</div>
-				) : (
-					<div className={`w-full mx-auto my-4 flex flex-col`}>
-						<p className="text-gray-500 my-2 font-sans font-thin">
-							Project's Snapshot
-						</p>
-						<img
-							className="md:w-[50%] w-full"
-							src={
-								oldProject?.snapshots[0]
-							}
-							alt=""
-						/>
-					</div>
-				)}
 
 				<Dropzone
 					accept={"image/jpeg, image/jpg, image/png" as any}
@@ -488,8 +480,7 @@ export default function CreateProject({ params }: { params: any }) {
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-sans my-8"
 					}
 					options={options}
-					// value={oldProject?.techStack}
-					defaultInputValue={oldProject?.techStack}
+					value={stack}
 					isSearchable
 					placeholder="Choose the tech used in your project...."
 					onChange={(e: any) => {
@@ -533,15 +524,12 @@ export default function CreateProject({ params }: { params: any }) {
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
 					}
 					options={repos}
-					defaultValue={oldProject?.links[0]}
-					defaultInputValue={oldProject?.links[0]}
 					placeholder="Select Project's Repository...."
 					onChange={(e: any) => {
-						console.log(e);
 						setRepository(e);
 						setLinks([
 							...links,
-							{ website: "github", link: e?.html_url },
+							{ label: "github", link: e?.html_url },
 						]);
 					}}
 				/>
@@ -584,31 +572,24 @@ export default function CreateProject({ params }: { params: any }) {
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
 					}
 					options={linkOptions}
+					value={links}
 					defaultValue={oldProject?.links}
 					placeholder="Add more links to your Project"
 					onChange={(e: any) => {
-						console.log(e);
-						setMoreLinks(e);
+						setLinks([...links, ...e]);
 					}}
 				/>
-				{moreLinks.length > 0 ? (
+				{links?.length > 1 ? (
 					<>
-						{moreLinks.map(
-							(link: { label: string; value: string }) => (
+						{links.map(
+							(link: { label: string; link: string }) => (
 								<div className="flex items-center my-2 w-[50%]">
 									<input
 										type="text"
 										className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-thin font-sans my-6 w-[90%]"
 										placeholder={`Enter ${link.label} link`}
-										onChange={(e) => {
-											setLinks([
-												...links,
-												{
-													website: link.value,
-													link: e.target.value,
-												},
-											]);
-										}}
+										value={link.link || ""}
+										onChange={(e) => handleLinkChange(e, link.label)}
 									/>
 									<img
 										src="/assets/link.png"

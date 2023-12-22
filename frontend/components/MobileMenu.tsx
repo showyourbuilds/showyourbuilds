@@ -59,6 +59,16 @@ const MobileMenu = ({ user }: { user: any }) => {
 								</Link>
 							</nav>
 						</div>
+						<div aria-label="navigation" className="py-2">
+							<nav className="grid gap-1">
+								<Link
+									href={`/bookmarks`}
+									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
+								>
+									<span>Bookmarks</span>
+								</Link>
+							</nav>
+						</div>
 						
 						<div aria-label="footer" className="pt-2">
 							<button

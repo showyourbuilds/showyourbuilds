@@ -6,7 +6,6 @@ import { NextResponse } from 'next/server';
 export const POST = async (req: any) => {
     await connect();
     const { newProject } = await req.json();
-    console.log(newProject);
     const project = await editProject(newProject);
     if (project) {
         return NextResponse.json({ project: project, status: 200 });

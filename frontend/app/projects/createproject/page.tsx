@@ -188,7 +188,7 @@ export default function CreateProject() {
 	const [description, setDescription] = useState("" as string);
 	const [repository, setRepository] = useState({} as any);
 	const [links, setLinks] = useState(
-		[] as { website: string; link: string }[]
+		[] as { label: string; link: string }[]
 	);
 	const [moreLinks, setMoreLinks] = useState(
 		[] as { value: string; label: string }[]
@@ -487,7 +487,7 @@ export default function CreateProject() {
 						setRepository(e);
 						setLinks([
 							...links,
-							{ website: "github", link: e?.html_url },
+							{ label: "github", link: e?.html_url },
 						]);
 					}}
 				/>
@@ -548,7 +548,7 @@ export default function CreateProject() {
 										setLinks([
 											...links,
 											{
-												website: link.value,
+												label: link.value,
 												link: e.target.value,
 											},
 										]);

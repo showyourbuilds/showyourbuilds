@@ -26,7 +26,7 @@ const projectSchema = new mongoose.Schema({
     },
     links: {
         type: [{
-            website: String,
+            label: String,
             link: String,
         }]
     },
