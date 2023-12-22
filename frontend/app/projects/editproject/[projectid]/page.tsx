@@ -168,7 +168,7 @@ export default function CreateProject({ params }: { params: any }) {
 		data: any;
 	};
 	const router = useRouter();
-	const [oldProject, setOldProject] = useState(null as any);
+	const [oldProject, setOldProject] = useState({} as any);
 	const [isAlertOpen, setIsAlertOpen] = useState(false);
 	const [alertMessage, setAlertMessage] = useState("");
 	const openAlert = () => {
@@ -181,14 +181,47 @@ export default function CreateProject({ params }: { params: any }) {
 	const [loading, setLoading] = useState(false);
 
 	const [repos, setRepos] = useState([]);
-	const [stack, setStack] = useState([]);
-	const [title, setTitle] = useState("" as string);
-	const [snapshots, setSnapshots] = useState([] as any);
-	const [description, setDescription] = useState("" as string);
+	const [snapshots, setSnapshots] = useState(null as any);
 	const [repository, setRepository] = useState({} as any);
-	const [links, setLinks] = useState(
+	const [newLinks, setNewLinks] = useState(
 		[] as { label: string; link: string }[]
 	);
+
+	const [availableOptions, setAvailableOptions] = useState(
+		[] as { value: string; label: string }[]
+	);
+	async function getAvailableOptions(links: any) {
+		const existingLabels = await links.map(
+			(link: { label: string; link: string }) => link.label
+		);
+		const filteredOptions = await linkOptions.filter(
+			(option) => !existingLabels.includes(option.label)
+		);
+		return filteredOptions;
+	}
+	const handleRemoveLink = async (index: number) => {
+		const updatedLinks = [...oldProject.links];
+		updatedLinks.splice(index, 1);
+		setOldProject({ ...oldProject, links: updatedLinks });
+		const availableOpt = (await getAvailableOptions(updatedLinks)) as {
+			value: string;
+			label: string;
+		}[];
+		setAvailableOptions(availableOpt);
+	};
+
+	const handleAddLink = (selectedOptions: any) => {
+		if (selectedOptions.length === 0) {
+			setNewLinks([]);
+		} else {
+			const newLinksToAdd = selectedOptions.map((option: any) => ({
+				label: option.label,
+				link: "", // Initialize link with an empty string
+			}));
+			setNewLinks([...newLinksToAdd]);
+		}
+		console.log(newLinks);
+	};
 
 	async function calculateLastUpdatedTime(updatedAt: string) {
 		const lastUpdated = new Date(updatedAt);
@@ -204,11 +237,11 @@ export default function CreateProject({ params }: { params: any }) {
 		return lastUpdated.toLocaleDateString("en-US", options);
 	}
 
-	useEffect(() => {
-		if (!session) {
-			router.push('/');
-		}
-	});
+	// useEffect(() => {
+	// 	if (!session) {
+	// 		router.push("/");
+	// 	}
+	// });
 
 	useEffect(() => {
 		async function getProject() {
@@ -226,19 +259,21 @@ export default function CreateProject({ params }: { params: any }) {
 				const data = await project.json();
 				if (data.status === 200) {
 					setOldProject(data.project);
-					setTitle(data.project.title);
-					setDescription(data.project.desc);
-					setStack(data.project.techStack);
-					setLinks(data.project.links);
-					setRepository(data.project.links[0]);
-					setSnapshots(data.project.snapshots);
+					const availableOpt = (await getAvailableOptions(
+						data.project.links
+					)) as {
+						value: string;
+						label: string;
+					}[];
+					setAvailableOptions(availableOpt);
 				}
 			} catch (error) {
 				console.log(error);
 			}
 		}
 		getProject();
-	}, [params]);
+	}, []);
+
 	useEffect(() => {
 		async function getRepositories() {
 			if (session) {
@@ -275,6 +310,12 @@ export default function CreateProject({ params }: { params: any }) {
 							}
 						);
 						setRepos(sortedData);
+						setRepository(
+							sortedData.find(
+								(repo: any) =>
+									repo.html_url === oldProject?.repolink
+							)
+						);
 					}
 				} catch (error) {
 					console.log(error);
@@ -282,15 +323,7 @@ export default function CreateProject({ params }: { params: any }) {
 			}
 		}
 		getRepositories();
-	}, [session]);
-
-	const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>, label: string) => {
-		const updatedLinks = links.map((link) =>
-		  link.label === label ? { ...link, link: e.target.value } : link
-		);
-		setLinks(updatedLinks);
-	  };
-	  
+	}, []);
 
 	const handleEditProject = async () => {
 		setLoading(true);
@@ -298,64 +331,82 @@ export default function CreateProject({ params }: { params: any }) {
 			const lastUpdated = await calculateLastUpdatedTime(
 				repository?.updated_at
 			);
-			const projectRef = ref(
-				storage,
-				`projectSnapshots/${session?.user?.username}/${repository?.name}`
-			);
-			uploadBytes(projectRef, snapshots[0])
-				.then((response) => {
-					const imgLinkRef = ref(
-						storage,
-						`${response.metadata.fullPath}`
-					);
-					getDownloadURL(imgLinkRef)
-						.then(async (url) => {
-							let newProject = { ...oldProject };
-							newProject.title = title;
-							newProject.desc = description;
-							newProject.links = links;
-							newProject.snapshots = [url];
-							newProject.techStack = stack;
-							newProject.duration = lastUpdated;
-							newProject.owner = session?.user?._id;
-							
-							const project = await fetch(
-								`/api/projects/editProject`,
-								{
-									method: "POST",
-									headers: {
-										"Content-Type": "application/json",
-										Accept: "application/json",
-									},
-									body: JSON.stringify({newProject}),
-								}
-							);
-							if (project.status === 200) {
-								setLoading(false);
-								router.push(`/profile/${session?.user?._id}`);
-							} else {
-								setLoading(false);
-								setAlertMessage(
-									"Some error occured, please try again later."
+			if (snapshots !== null) {
+				const projectRef = ref(
+					storage,
+					`projectSnapshots/${session?.user?.username}/${repository?.name}`
+				);
+				uploadBytes(projectRef, snapshots[0])
+					.then((response) => {
+						const imgLinkRef = ref(
+							storage,
+							`${response.metadata.fullPath}`
+						);
+						getDownloadURL(imgLinkRef)
+							.then(async (url) => {
+								let newProject = { ...oldProject };
+								newProject.snapshots = [url];
+								newProject.duration = lastUpdated;
+								const project = await fetch(
+									`/api/projects/editProject`,
+									{
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+											Accept: "application/json",
+										},
+										body: JSON.stringify({ newProject }),
+									}
 								);
-								openAlert();
-							}
-						})
-						.catch((error) => {
-							console.log(error);
-							setLoading(false);
-						});
-				})
-				.catch((error) => {
-					console.log(error);
-					setLoading(false);
+								if (project.status === 200) {
+									setLoading(false);
+									router.push(
+										`/profile/${session?.user?._id}`
+									);
+								} else {
+									setLoading(false);
+									setAlertMessage(
+										"Some error occured, please try again later."
+									);
+									openAlert();
+								}
+							})
+							.catch((error) => {
+								console.log(error);
+								setLoading(false);
+							});
+					})
+					.catch((error) => {
+						console.log(error);
+						setLoading(false);
+					});
+			} else {
+				let newProject = { ...oldProject };
+				newProject.duration = lastUpdated;
+				const project = await fetch(`/api/projects/editProject`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+					body: JSON.stringify({ newProject }),
 				});
+				if (project.status === 200) {
+					setLoading(false);
+					router.push(`/profile/${session?.user?._id}`);
+				} else {
+					setLoading(false);
+					setAlertMessage(
+						"Some error occured, please try again later."
+					);
+					openAlert();
+				}
+			}
 		} catch (error) {
 			console.log(error);
 			setLoading(false);
 		}
 	};
-
 	return (
 		<ComposedLayout>
 			<div className={`${loading ? "block" : "hidden"}`}>
@@ -370,18 +421,20 @@ export default function CreateProject({ params }: { params: any }) {
 				<h1 className="text-[2rem] font-bold font-serif">
 					Edit Project
 				</h1>
-					<div className={`w-full mx-auto my-4 flex flex-col`}>
-						<p className="text-gray-500 my-2 font-sans font-thin">
-							Project's Snapshot
-						</p>
-						<img
-							className="md:w-[50%] w-full"
-							src={
-								snapshots[0]?.preview || snapshots[0] 
-							}
-							alt=""
-						/>
-					</div>
+				<div className={`w-full mx-auto my-4 flex flex-col`}>
+					<p className="text-gray-500 my-2 font-sans font-thin">
+						Project's Snapshot
+					</p>
+					<img
+						className="md:w-[50%] w-full"
+						src={
+							snapshots !== null
+								? snapshots[0]?.preview
+								: oldProject ? oldProject?.snapshots : ""
+						}
+						alt=""
+					/>
+				</div>
 
 				<Dropzone
 					accept={"image/jpeg, image/jpg, image/png" as any}
@@ -402,7 +455,6 @@ export default function CreateProject({ params }: { params: any }) {
 									})
 								)
 							);
-							console.log(snapshots);
 						} else {
 							setAlertMessage(
 								"Invalid file type. Please upload only JPG, JPEG, or PNG files."
@@ -424,8 +476,9 @@ export default function CreateProject({ params }: { params: any }) {
 							>
 								<input {...getInputProps()} />
 								<p className="text-xl font-semibold text-gray-400">
-									{snapshots[0]?.name ||
-										"Drag 'n' drop Project's snapshot here, or click to select file"}
+									{snapshots !== null
+										? snapshots[0]?.name
+										: "Drag 'n' drop Project's snapshot here, or click to select file"}
 								</p>
 							</div>
 						</section>
@@ -437,7 +490,7 @@ export default function CreateProject({ params }: { params: any }) {
 					placeholder={oldProject?.title}
 					defaultValue={oldProject?.title}
 					onChange={(e) => {
-						setTitle(e.target.value);
+						setOldProject({ ...oldProject, title: e.target.value });
 					}}
 				/>
 				<textarea
@@ -448,7 +501,7 @@ export default function CreateProject({ params }: { params: any }) {
 					cols={20}
 					style={{ resize: "none" }}
 					onChange={(e) => {
-						setDescription(e.target.value);
+						setOldProject({ ...oldProject, desc: e.target.value });
 					}}
 				/>
 				<Select
@@ -480,11 +533,11 @@ export default function CreateProject({ params }: { params: any }) {
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-sans my-8"
 					}
 					options={options}
-					value={stack}
+					value={oldProject?.techStack}
 					isSearchable
 					placeholder="Choose the tech used in your project...."
 					onChange={(e: any) => {
-						setStack(e);
+						setOldProject({ ...oldProject, techStack: e });
 					}}
 				/>
 				<Select
@@ -523,14 +576,12 @@ export default function CreateProject({ params }: { params: any }) {
 					className={
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
 					}
+					value={repository}
 					options={repos}
 					placeholder="Select Project's Repository...."
 					onChange={(e: any) => {
 						setRepository(e);
-						setLinks([
-							...links,
-							{ label: "github", link: e?.html_url },
-						]);
+						setOldProject({ ...oldProject, repoLink: e.html_url });
 					}}
 				/>
 				<Select
@@ -567,47 +618,84 @@ export default function CreateProject({ params }: { params: any }) {
 							},
 						}),
 					}}
-					isMulti
 					className={
 						"border-b-gray-200 focus:shadow-none text-gray-500 font-thin my-8"
 					}
-					options={linkOptions}
-					value={links}
-					defaultValue={oldProject?.links}
 					placeholder="Add more links to your Project"
-					onChange={(e: any) => {
-						setLinks([...links, ...e]);
+					isMulti
+					options={availableOptions}
+					onChange={(selectedOptions) => {
+						handleAddLink(selectedOptions);
 					}}
 				/>
-				{links?.length > 1 ? (
-					<>
-						{links.map(
-							(link: { label: string; link: string }) => (
-								<div className="flex items-center my-2 w-[50%]">
-									<input
-										type="text"
-										className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-thin font-sans my-6 w-[90%]"
-										placeholder={`Enter ${link.label} link`}
-										value={link.link || ""}
-										onChange={(e) => handleLinkChange(e, link.label)}
-									/>
-									<img
-										src="/assets/link.png"
-										className="w-[5%]"
-										alt=""
-									/>
-								</div>
-							)
-						)}
-					</>
-				) : (
-					<></>
+				{oldProject?.links?.map(
+					(link: { label: string; link: string }, index: number) => (
+						<div
+							key={index}
+							className="flex items-center my-4 w-full"
+						>
+							<img
+								src="/assets/link.png"
+								className="w-[20px] mx-4"
+								alt=""
+							/>
+							<span className="mx-2 text-gray-700">
+								{link.label}
+							</span>
+							<span className="text-gray-500 mx-2 underline">
+								{link.link}
+							</span>
+							<button
+								className="mx-4 border border-gray-300 rounded-lg hover:border-gray-600 text-[10px] text-gray-400 p-2"
+								onClick={() => handleRemoveLink(index)}
+							>
+								Remove
+							</button>
+						</div>
+					)
 				)}
+				{newLinks.map(
+					(link: { label: string; link: string }, index: number) => {
+						return (
+							<div
+								key={index}
+								className="flex items-center my-2 w-[50%]"
+							>
+								<input
+									type="text"
+									className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-thin font-sans my-6 w-[90%]"
+									placeholder={`Enter ${link.label} link`}
+									value={link.link}
+									onChange={(e) => {
+										const updatedLinks = [
+											...newLinks,
+										] as {label: string, link: string}[];
+										updatedLinks[index] = {
+											...link,
+											link: e.target.value,
+										};
+										setNewLinks(updatedLinks);
+									}}
+								/>
+								<img
+									src="/assets/link.png"
+									className="w-[5%]"
+									alt=""
+								/>
+							</div>
+						);
+					}
+					)}
+					<button onClick={() => {
+						setOldProject({ ...oldProject, links: [...oldProject.links, ...newLinks] })
+						setNewLinks([])
+					}} className={`w-[20%] ${newLinks.length === 0 ? "hidden" : "flex"} hover:border-gray-600 p-2 border rounded-lg mx-2 mb-8 text-gray-400 text-[10px]`}>Save Links</button>
+
 				<button
 					className="w-[30%] min-w-[50px] border border-gray-400 font-sans font-thin text-[#626262] hover:border-black hover:border-[2px] rounded-[20px] py-2 px-4 my-4"
 					onClick={handleEditProject}
 				>
-					Save
+					Save Project
 				</button>
 			</div>
 		</ComposedLayout>

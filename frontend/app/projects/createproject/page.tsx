@@ -190,10 +190,7 @@ export default function CreateProject() {
 	const [links, setLinks] = useState(
 		[] as { label: string; link: string }[]
 	);
-	const [moreLinks, setMoreLinks] = useState(
-		[] as { value: string; label: string }[]
-	);
-
+	const [moreLinks, setMoreLinks] = useState([] as {label: string, value: string}[]);
 	async function calculateLastUpdatedTime(updatedAt: string) {
 		const lastUpdated = new Date(updatedAt);
 		const options = {
@@ -283,6 +280,7 @@ export default function CreateProject() {
 										title: title,
 										desc: description,
 										links: links,
+										repoLink: repository?.html_url,
 										snapshots: [url],
 										techStack: stack,
 										duration: lastUpdated,
@@ -485,10 +483,6 @@ export default function CreateProject() {
 					onChange={(e: any) => {
 						console.log(e);
 						setRepository(e);
-						setLinks([
-							...links,
-							{ label: "github", link: e?.html_url },
-						]);
 					}}
 				/>
 				<Select
@@ -532,8 +526,8 @@ export default function CreateProject() {
 					options={linkOptions}
 					placeholder="Add more links to your Project"
 					onChange={(e: any) => {
-						console.log(e);
 						setMoreLinks(e);
+						console.log(moreLinks);
 					}}
 				/>
 				{moreLinks.length > 0 ? (
@@ -548,7 +542,7 @@ export default function CreateProject() {
 										setLinks([
 											...links,
 											{
-												label: link.value,
+												label: link.label,
 												link: e.target.value,
 											},
 										]);

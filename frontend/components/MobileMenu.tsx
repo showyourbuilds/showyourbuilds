@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -20,9 +20,11 @@ const MobileMenu = ({ user }: { user: any }) => {
 				<button
 					type="button"
 					onClick={toggleDropdown}
-					onBlur={() => setTimeout(() => {
-						setIsOpen(false)
-					}, 1000)}
+					onBlur={() =>
+						setTimeout(() => {
+							setIsOpen(false);
+						}, 1000)
+					}
 					className="flex justify-center w-full p-4 text-sm font-medium"
 				>
 					<div className="flex m-2 items-center">
@@ -44,43 +46,36 @@ const MobileMenu = ({ user }: { user: any }) => {
 			</div>
 
 			{isOpen && (
-				<div className="origin-top-right z-10 absolute right-0 mt-2 w-50 shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-					<div
-						className="py-1"
-						role="menu"
-					>
-						<div aria-label="navigation" className="py-2">
-							<nav className="grid gap-1">
-								<Link
-									href={`/profile/${user?._id}`}
-									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-								>
-									<span>Account</span>
-								</Link>
-							</nav>
+				<div className="origin-top-right z-10 absolute right-0 w-50 shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+					<div role="menu">
+						<div aria-label="navigation">
+							<Link
+								href={`/profile/${user?._id}`}
+								className="flex items-center leading-6 space-x-3 p-4 w-full text-gray-600 focus:outline-none hover:bg-gray-100"
+							>
+								<span>Account</span>
+							</Link>
 						</div>
-						<div aria-label="navigation" className="py-2">
-							<nav className="grid gap-1">
-								<Link
-									href={`/bookmarks`}
-									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-								>
-									<span>Bookmarks</span>
-								</Link>
-							</nav>
+						<div aria-label="navigation">
+							<Link
+								href={`/bookmarks`}
+								className="flex items-center leading-6 space-x-3 p-4 w-full text-gray-600 focus:outline-none hover:bg-gray-100"
+							>
+								<span>Bookmarks</span>
+							</Link>
 						</div>
-						
-						<div aria-label="footer" className="pt-2">
+
+						<div aria-label="footer">
 							<button
-								className="flex items-center space-x-3 py-3 px-4 w-full leading-6 text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-                                onClick={handleLogout} 
+								className="flex items-center space-x-3 p-4 w-full leading-6 text-gray-600 focus:outline-none hover:bg-gray-100"
+								onClick={handleLogout}
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									aria-hidden="true"
-									className="w-7 h-7"
-									width="24"
-									height="24"
+									className="w-5 h-5"
+									width="20"
+									height="20"
 									viewBox="0 0 24 24"
 									strokeWidth="2"
 									stroke="currentColor"
@@ -108,4 +103,3 @@ const MobileMenu = ({ user }: { user: any }) => {
 };
 
 export default MobileMenu;
-	

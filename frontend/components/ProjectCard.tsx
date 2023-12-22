@@ -53,7 +53,6 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 		<div
 			key={key}
 			className="md:w-[70%] w-[90%] relative hover:scale-[1.01] transition mx-auto my-8 border rounded-lg"
-			// onClick={() => {router.push(`/projects/${item._id}`)}}
 		>
 			{/* {isLiked ? (
 				<div

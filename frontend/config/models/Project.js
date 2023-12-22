@@ -30,6 +30,10 @@ const projectSchema = new mongoose.Schema({
             link: String,
         }]
     },
+    repoLink: {
+        type: String,
+        required: true,
+    },
     views: {
         type: Number,
         default: 0,
