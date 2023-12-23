@@ -10,8 +10,14 @@ export default function LinksBar({links}: {links: {label: string, link: string}[
                         <img src="/assets/github.png" alt="" width={25} className="mx-4" />
                     ) : link.label === "Twitter" ? (
                         <img src="/assets/twitter.png" alt="" width={25} className="mx-4" />
-                    ) : (
+                    ) : link.label === "Portfolio" ? (
+                        <img src="/assets/link.png" width={25} className="mx-4" alt="" />
+                    ) : link.label === "LinkedIn" ? (
+                        <img src="/assets/linkedin.png" width={25} className="mx-4" alt="" />
+                    ) : link.label === "Instagram" ? (
                         <img src="/assets/instagram.png" width={25} className="mx-4" alt="" />
+                    ) : (
+                        <></>
                     )}
                 </div>
             )}

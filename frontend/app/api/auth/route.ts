@@ -32,6 +32,7 @@ export const POST = async (req: any) => {
 			password: hashedPassword,
 			name: name,
 			image: image || "",
+			bookmarks: [],
 		});
 		try {
 			const savedUser = await newUser.save();

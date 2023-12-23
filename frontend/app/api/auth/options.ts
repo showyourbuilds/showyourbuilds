@@ -87,6 +87,7 @@ export const authOptions: AuthOptions = {
 							username: user?.username as string,
 							email: (user?.email as string) || "",
 							provider: ["github"],
+							bookmarks: [],
 						});
 						await newUser.save();
 						return true;
@@ -128,6 +129,7 @@ export const authOptions: AuthOptions = {
 							username: username as string,
 							email: (user?.email as string) || "",
 							image: user?.image as string,
+							bookmarks: [],
 							provider: ["google"],
 						});
 						await newUser.save();

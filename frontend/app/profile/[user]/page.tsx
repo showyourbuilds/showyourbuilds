@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import LoadingPage from "@/components/LoadingPage";
+import LinksBar from "@/components/LinksBar";
 export default function User({ params }: { params: { user: string } }) {
 	const { data: session } = useSession() as any;
 	const [projects, setProjects] = useState([]);
@@ -56,7 +57,7 @@ export default function User({ params }: { params: { user: string } }) {
 		}
 		getData();
 	}, [params]);
-	
+
 	return (
 		<ComposedLayout>
 			<div className={`${loading ? "block" : "hidden"}`}>
@@ -76,7 +77,7 @@ export default function User({ params }: { params: { user: string } }) {
 					id="profile"
 				>
 					<div
-						className="flex w-full px-2 my-2 justify-between mx-auto"
+						className="flex w-full px-2 my-4 justify-between mx-auto"
 						id="profile-user-info"
 					>
 						<div className="pl-2">
@@ -97,26 +98,13 @@ export default function User({ params }: { params: { user: string } }) {
 							{user?.bio}
 						</p>
 					</div>
-					<div className="flex items-center w-full py-4">
-						<img
-							src="/assets/github.png"
-							alt=""
-							width={25}
-							className="mx-4"
-						/>
-						<img
-							src="/assets/twitter.png"
-							alt=""
-							width={25}
-							className="mx-4"
-						/>
-						<img
-							src="/assets/instagram.png"
-							width={25}
-							className="mx-4"
-							alt=""
-						/>
-					</div>
+					{user?.socials?.length > 0 ? (
+						<div className="flex items-center w-full my-4">
+							<LinksBar links={user?.socials} />
+						</div>
+					) : (
+						<p className="text-gray-400 font-mono text-[10px] hover:underline">Add your socials to get them displayed here</p>
+					)}
 				</div>
 				<Link href={"/projects/createproject"}>
 					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
