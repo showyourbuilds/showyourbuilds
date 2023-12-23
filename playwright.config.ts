@@ -79,10 +79,9 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run dev',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-  },
-  globalSetup: require.resolve('./tests/example.spec.ts'),
+  // webServer: {
+  //   command: 'npm run dev',
+  //   url: baseURL,
+  //   reuseExistingServer: !process.env.CI,
+  // },
 });
