@@ -10,7 +10,7 @@ const user = new mongoose.Schema({
     projects: { type: Array, required: false },
     image: { type: String, required: false },
     bookmarks: { type: Array, required: false, default: [] },
-    provider: { type: String, required: true, default: 'credentials' },
+    provider: { type: Array, required: true, default: ['credentials'] },
 }, 
 {
     timestamps: true,

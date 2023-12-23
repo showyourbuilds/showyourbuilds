@@ -93,7 +93,7 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 					src={
 						item?.snapshots?.length > 0
 							? item.snapshots[0]
-							: "/assets/1.png"
+							: ""
 					}
 					width={"100%"}
 					alt=""

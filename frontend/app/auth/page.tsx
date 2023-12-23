@@ -36,6 +36,10 @@ export default function auth() {
 		setLoading(true);
 		signIn("github");
 	}
+	const handleGithubLogins = async () => {
+		setLoading(true);
+		signIn("google");
+	}
 	const handleLogin = async (e: any) => {
 		setLoading(true);
 		e.preventDefault();
@@ -49,7 +53,8 @@ export default function auth() {
 			password,
 		});
 		if (res?.error) {
-			setAlertMessage("Invalid Credentials");
+			console.log(res.error);
+			setAlertMessage("Check your credentials again");
 			openAlert();
 			setLoading(false);
 		} else {
@@ -87,8 +92,7 @@ export default function auth() {
 			const status = responce?.status;
 			if (status === 400) {
 				setLoading(false);
-				console.log("Email already Registered");
-				setAlertMessage("This email is already registered");
+				setAlertMessage(responce.error);
 				openAlert();
 			}
 			if (status === 500) {
@@ -104,7 +108,7 @@ export default function auth() {
 					password: password,
 				});
 				if (loginres?.error) {
-				setLoading(false);
+					setLoading(false);
 					setAlertMessage("Invalid Credentials");
 					openAlert();
 				} else {
@@ -112,11 +116,11 @@ export default function auth() {
 					router.push("/");
 				}
 			}
-		} catch (error) {
+		} catch (error: any) {
 			setLoading(false);
-			setAlertMessage(`${error}`);
+			const errorres = await error.json();
+			setAlertMessage(`${errorres.error}`);
 			openAlert();
-			console.log(error);
 		}
 	};
 	return (
@@ -179,6 +183,7 @@ export default function auth() {
 						<button
 							type="button"
 							className="bg-[#2363c9] text-white hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-black focus:ring-[#4285F4]/50 rounded-[50%] p-2 inline-flex items-center dark:focus:ring-[#4285F4]/55 me-2 mb-2"
+							onClick={() => handleGithubLogins()}
 						>
 							<svg
 								className="w-4 h-4"

@@ -1,11 +1,11 @@
-import { AuthOptions, Session } from "next-auth";
+import { AuthOptions } from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import User from "@/config/models/User";
 import connect from "@/config/db";
-import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 
 export const authOptions: AuthOptions = {
@@ -20,28 +20,21 @@ export const authOptions: AuthOptions = {
 			async authorize(credentials: any) {
 				try {
 					await connect();
-					console.log(credentials);
 					const user = await User.findOne({
 						email: credentials.email,
 					});
 					if (user) {
-						console.log(credentials.password);
-						console.log(user.password);
+						
 						const isPasswordCorrect = await bcrypt.compare(
 							credentials.password,
 							user.password
 						);
-						console.log("is password correct?" + isPasswordCorrect);
-						
 						if (isPasswordCorrect) {
-							console.log(user);
 							return user;
 						}
 					}
 					return null;
 				} catch (err: any) {
-					console.log(err);
-
 					throw new Error(err);
 				}
 			},
@@ -61,8 +54,12 @@ export const authOptions: AuthOptions = {
 			authorization: {
 				params: {
 					scope: "repo user:email",
-				}
-			}
+				},
+			},
+		}),
+		GoogleProvider({
+			clientId: process.env.GOOGLE_ID ?? "",
+			clientSecret: process.env.GOOGLE_SECRET ?? "",
 		}),
 	],
 	session: {
@@ -75,7 +72,7 @@ export const authOptions: AuthOptions = {
 		}: {
 			user: AuthUser | any;
 			account: Account | null;
-		}) {
+		}): Promise<string | boolean> {
 			if (account?.provider == "credentials") {
 				return true;
 			} else if (account?.provider == "github") {
@@ -84,21 +81,80 @@ export const authOptions: AuthOptions = {
 					const existingUser = await User.findOne({
 						email: user.email as string,
 					});
-					console.log(user);
-					
 					if (!existingUser) {
 						const newUser = new User({
 							name: user.name as string,
 							username: user?.username as string,
-							email: user?.email as string || "",
-							provider: "github",
+							email: (user?.email as string) || "",
+							provider: ["github"],
 						});
 						await newUser.save();
 						return true;
+					} else if (existingUser.provider.includes("google") || existingUser.provider.includes("credentials")) {
+						if (existingUser.provider.includes("github")) {
+							return true;
+						} else {
+							const updateUser = await User.findOneAndUpdate(
+								{ _id: existingUser._id },
+								{
+									provider: [
+										...existingUser.provider,
+										"github"
+									],
+									image: existingUser.image || user?.image,
+								}
+							);
+							if (updateUser.acknowledged) {
+								return true;
+							} else {
+								return false;
+							}
+						}
 					}
 					return true;
 				} catch (err) {
-					console.log("Error saving user", err);
+					return "error processing the github signup request ";
+				}
+			} else if (account?.provider == "google") {
+				await connect();
+				try {
+					const existingUser = await User.findOne({
+						email: user.email as string,
+					});
+					if (!existingUser) {
+						const username = user.email.split("@")[0];
+						const newUser = new User({
+							name: user.name as string,
+							username: username as string,
+							email: (user?.email as string) || "",
+							image: user?.image as string,
+							provider: ["google"],
+						});
+						await newUser.save();
+						return true;
+					} else if (existingUser.provider.includes("google")) {
+						return true;
+					} else if (
+						existingUser.provider.includes("github") ||
+						existingUser.provider.includes("credentials")
+					) {
+						const updateUser = await User.findOneAndUpdate(
+							{ _id: existingUser._id },
+							{
+								provider: [
+									...existingUser.provider,
+									account.provider,
+								],
+							}
+						);
+						if (updateUser.acknowledged) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+					return true;
+				} catch (err) {
 					return false;
 				}
 			} else {
@@ -110,10 +166,14 @@ export const authOptions: AuthOptions = {
 				if (account.provider == "credentials") {
 					token.provider = "credentials";
 					token.accessToken = account.access_token;
-					console.log(token);
 				} else if (account.provider == "github") {
 					token.accessToken = account.access_token;
 					token.provider = "github";
+					token.username = account?.username;
+					token.id = profile?.sub;
+				} else if (account.provider == "google") {
+					token.accessToken = account.access_token;
+					token.provider = "google";
 					token.username = account?.username;
 					token.id = profile?.sub;
 				}
@@ -138,7 +198,30 @@ export const authOptions: AuthOptions = {
 						name: token.name as string,
 						username: token.username as string,
 						email: token.email as string,
-						provider: "github",
+						provider: ["github"],
+						image: token.picture as string,
+					});
+					await newUser.save();
+					session.user = newUser;
+					session.token = token;
+					return session;
+				} else {
+					delete res.password;
+					session.user = res;
+					session.token = token;
+					return session;
+				}
+			} else if (token.provider === "google") {
+				await connect();
+				const res = await User.findOne({
+					email: token.email as string,
+				});
+				if (!res) {
+					const newUser = new User({
+						name: token.name as string,
+						username: token.username as string,
+						email: token.email as string,
+						provider: ["google"],
 						image: token.picture as string,
 					});
 					await newUser.save();

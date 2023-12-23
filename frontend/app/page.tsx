@@ -6,7 +6,6 @@ import UserPreview from "@/components/UserPreview";
 import SearchProject from "@/components/SearchProject";
 
 export default async function Home() {
-
 	return (
 		<ComposedLayout>
 			<p className="md:text-3xl text-2xl text-center font-thin font-serif my-6">

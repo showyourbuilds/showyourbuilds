@@ -8,24 +8,36 @@ export const POST = async (req: any) => {
 	await connect();
 	const existingUser = await User.findOne({ email: email });
 	if (existingUser) {
-		return new NextResponse("User already exists", {
-			status: 400,
+		if (existingUser.provider.includes("github")) {
+			return NextResponse.json({
+				error: "Github account already registered with this Email",
+				status: 400,
+			});
+		} else if (existingUser.provider.includes("google")) {
+			return NextResponse.json({
+				error: "Google account already registered with this Email",
+				status: 400,
+			});
+		} else {
+			return NextResponse.json({
+				error: "User already exists with this email",
+				status: 400,
+			});
+		}
+	} else {
+		const hashedPassword = await bcrypt.hash(password, 12);
+		const newUser = new User({
+			email: email,
+			username: username,
+			password: hashedPassword,
+			name: name,
+			image: image || "",
 		});
-	}
-	const hashedPassword = await bcrypt.hash(password, 12);
-	const newUser = new User({
-		email: email,
-        username: username,
-		password: hashedPassword,
-		name: name,
-		image: image || "",
-	});
-	try {
-		const savedUser = await newUser.save();
-		console.log(savedUser);
-		return NextResponse.json({ user: savedUser, status: 201 });
-	} catch (error) {
-        console.log(error);
-		return NextResponse.json({ error, status: 500 });
+		try {
+			const savedUser = await newUser.save();
+			return NextResponse.json({ user: savedUser, status: 201 });
+		} catch (error) {
+			return NextResponse.json({ error, status: 500 });
+		}
 	}
 };
