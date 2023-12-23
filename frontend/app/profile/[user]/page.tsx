@@ -2,7 +2,7 @@
 import ProjectCard from "@/components/ProjectCard";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
 import React, { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LoadingPage from "@/components/LoadingPage";
 import LinksBar from "@/components/LinksBar";
@@ -43,11 +43,9 @@ export default function User({ params }: { params: { user: string } }) {
 				);
 				const res = await data.json();
 				if (res.status === 200) {
-					console.log(res.projects);
 					setProjects(res.projects);
 					setLoading(false);
 				} else {
-					console.log(res);
 					setLoading(false);
 				}
 			} catch (error) {

@@ -69,7 +69,6 @@ export default function EditProfile() {
 			}));
 			setNewLinks([...newLinksToAdd]);
 		}
-		console.log(newLinks);
 	};
 
 	const handleEditUser = async () => {
@@ -89,7 +88,6 @@ export default function EditProfile() {
 			update();
 			setLoading(false);
 		} else {
-			console.log(response);
 			setLoading(false);
 		}
 	};

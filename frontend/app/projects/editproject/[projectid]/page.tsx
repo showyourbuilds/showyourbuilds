@@ -220,7 +220,6 @@ export default function CreateProject({ params }: { params: any }) {
 			}));
 			setNewLinks([...newLinksToAdd]);
 		}
-		console.log(newLinks);
 	};
 
 	async function calculateLastUpdatedTime(updatedAt: string) {
@@ -464,9 +463,6 @@ export default function CreateProject({ params }: { params: any }) {
 					}}
 					multiple={false}
 					maxFiles={1}
-					onDropRejected={(fileRejections) => {
-						console.log(fileRejections);
-					}}
 				>
 					{({ getRootProps, getInputProps }) => (
 						<section className="my-4">

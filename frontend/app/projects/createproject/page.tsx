@@ -361,7 +361,6 @@ export default function CreateProject() {
 									})
 								)
 							);
-							console.log(snapshots);
 						} else {
 							setAlertMessage(
 								"Invalid file type. Please upload only JPG, JPEG, or PNG files."
@@ -371,9 +370,6 @@ export default function CreateProject() {
 					}}
 					multiple={false}
 					maxFiles={1}
-					onDropRejected={(fileRejections) => {
-						console.log(fileRejections);
-					}}
 				>
 					{({ getRootProps, getInputProps }) => (
 						<section className="my-4">
@@ -481,7 +477,6 @@ export default function CreateProject() {
 					options={repos}
 					placeholder="Select Project's Repository...."
 					onChange={(e: any) => {
-						console.log(e);
 						setRepository(e);
 					}}
 				/>
@@ -527,25 +522,23 @@ export default function CreateProject() {
 					placeholder="Add more links to your Project"
 					onChange={(e: any) => {
 						setMoreLinks(e);
-						console.log(moreLinks);
 					}}
 				/>
 				{moreLinks.length > 0 ? (
 					<>
-						{moreLinks.map((link) => (
-							<div className="flex items-center my-2 w-[50%]">
+						{moreLinks.map((link, index: number) => (
+							<div key={index} className="flex items-center my-2 w-[50%]">
 								<input
 									type="text"
 									className="border-0 focus:ring-0 focus:border-gray-400 border-b-2 border-b-gray-200 font-thin font-sans my-6 w-[90%]"
 									placeholder={`Enter ${link.label} link`}
 									onChange={(e) => {
-										setLinks([
-											...links,
-											{
-												label: link.label,
-												link: e.target.value,
-											},
-										]);
+										const updatedLinks = [...links];
+										updatedLinks[index] = {
+											label: link.label,
+											link: e.target.value,
+										};
+										setLinks(updatedLinks);
 									}}
 								/>
 								<img src="/assets/link.png" className="w-[5%]" alt="" />

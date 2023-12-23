@@ -53,7 +53,6 @@ export default function auth() {
 			password,
 		});
 		if (res?.error) {
-			console.log(res.error);
 			setAlertMessage("Check your credentials again");
 			openAlert();
 			setLoading(false);
@@ -69,13 +68,21 @@ export default function auth() {
 		const username = e.target[1].value;
 		const email = e.target[2].value;
 		if (!checkEmail(email)) {
-			console.log("enter proper email");
+			setAlertMessage("Enter proper email");
+			openAlert();
 			setLoading(false);
 			return;
 		}
 		const password = e.target[2].value;
 		if (!password || password.length < 8) {
-			console.log("password must be atleast 8 characters long");
+			setAlertMessage("Password must be atleast 8 characters long");
+			openAlert();
+			setLoading(false);
+			return;
+		}
+		if (password !== e.target[3].value) {
+			setAlertMessage("Passwords don't match");
+			openAlert();
 			setLoading(false);
 			return;
 		}
@@ -97,7 +104,6 @@ export default function auth() {
 			}
 			if (status === 500) {
 				setLoading(false);
-				console.log("Server Error");
 				setAlertMessage("Server Error");
 				openAlert();
 			}
