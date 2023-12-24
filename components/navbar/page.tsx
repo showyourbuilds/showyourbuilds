@@ -11,7 +11,20 @@ export default function Navbar() {
 	const isLoggedIn = sessionStatus === "authenticated" ? true : false;
 	const router = useRouter();
 	const [isMenuOpen, setisMenuOpen] = useState(false);
-	const [isHeadlineOpen, setisHeadlineOpen] = useState(!session?.user?.provider.includes("github") || false);
+
+	function completionLevel() {
+		if (session?.user?.socials?.length > 0) {
+			if (session?.user?.bio?.length > 0) {
+				if (session?.user?.image.length > 0) {
+					return true;
+				}
+				return false;
+			}
+			return false;
+		} 
+		return false;
+	}
+	const [isHeadlineOpen, setisHeadlineOpen] = useState( !completionLevel() || false);
 	const handleClick = () => {
 		if (!isMenuOpen) {
 			document

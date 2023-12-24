@@ -1,5 +1,5 @@
 "use client";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/components/projectsRender/ProjectCard";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -28,6 +28,18 @@ export default function User({ params }: { params: { user: string } }) {
 			);
 		}
 	};
+	function completionLevel() {
+		if (user?.socials?.length > 0) {
+			if (user?.bio?.length > 0) {
+				if (user?.image.length > 0) {
+					return 100;
+				}
+				return 75;
+			}
+			return 50;
+		} 
+		return 10;
+	}
 	useEffect(() => {
 		setLoading(true);
 		async function getData() {
@@ -61,7 +73,10 @@ export default function User({ params }: { params: { user: string } }) {
 			<div className={`${loading ? "block" : "hidden"}`}>
 				<LoadingPage />
 			</div>
-			<div className="md:w-[50%] w-[90%] mx-auto my-4">
+			<div className="md:w-[50%] w-[90%] mx-auto">
+				<div className={`w-[${completionLevel()}%] ${completionLevel() === 100 ? "bg-green-500" : completionLevel() === 75 ? "bg-yellow-500" : "bg-red-700"} h-[10px]`} aria-label="Profile Completion"></div>
+			</div>
+			<div className="md:w-[50%] w-[90%] mx-auto mb-4">
 				<div className="w-full aspect-[3/1] relative" id="header">
 					<img src="/assets/header.jpeg" className="w-full" alt="" />
 					<img
@@ -101,7 +116,7 @@ export default function User({ params }: { params: { user: string } }) {
 							<LinksBar links={user?.socials} />
 						</div>
 					) : (
-						<p className="text-gray-400 font-mono text-[10px] hover:underline">Add your socials to get them displayed here</p>
+						<p className="text-gray-400 font-mono my-4 pl-4 text-[13px]">Add your socials to display them here</p>
 					)}
 				</div>
 				<Link href={"/projects/createproject"}>
@@ -121,10 +136,7 @@ export default function User({ params }: { params: { user: string } }) {
 					))}
 				</div>
 			) : (
-				<p>
-					No projects to display here, add some project's for people
-					to see them
-				</p>
+				<p className="text-gray-400 font-mono my-4 text-[13px] text-center hover:underline">No project(s) listed</p>
 			)}
 		</ComposedLayout>
 	);
