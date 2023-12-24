@@ -16,7 +16,6 @@ export const GET = async (req: any) => {
             select: string;
         });
     if (projects.length > 0) {
-        console.log(projects);
         return NextResponse.json({ projects: projects, status: 200 });
     } else {    
         return NextResponse.json({ message: "Projects not found", status: 404 });
