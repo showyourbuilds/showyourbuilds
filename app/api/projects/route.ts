@@ -1,6 +1,7 @@
 import User from '@/config/models/User';
 import Project from '@/config/models/Project';
 import { NextResponse } from 'next/server';
+import connect from '@/config/db';
 
 export const GET = async (req: any) => {
     const projects = await getProjects();
@@ -12,6 +13,7 @@ export const GET = async (req: any) => {
 }
 
 async function getProjects() {
+    await connect();
     const projects = await Project.find().populate({
         path: 'owner',
         model: User,

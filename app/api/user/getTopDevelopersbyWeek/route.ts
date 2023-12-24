@@ -1,3 +1,4 @@
+import connect from '@/config/db';
 import User from '@/config/models/User';
 import { NextResponse } from 'next/server';
 
@@ -11,7 +12,8 @@ export const GET = async (req: any) => {
 }
 
 async function getusers() {
-    const users = await User.find()
+    await connect();
+    const users = await User.find();
     if (users) {
         return users;
     }
