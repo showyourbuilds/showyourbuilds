@@ -5,13 +5,18 @@ import React, { useState } from "react";
 import UserPreview from "../UserPreview";
 import Notifications from "../Notifications";
 import MobileMenu from "../MobileMenu";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 export default function Navbar() {
 	const { data: session, status: sessionStatus } = useSession() as any;
+	let searchTimeout: NodeJS.Timeout;
+	const searchParams = useSearchParams();
 	const isLoggedIn = sessionStatus === "authenticated" ? true : false;
 	const router = useRouter();
 	const [isMenuOpen, setisMenuOpen] = useState(false);
-
+	const [search, setSearch] = useState(
+		searchParams.get("query") || ("" as string)
+	);
+	const [results, setResults] = useState([] as any[]);
 	function completionLevel() {
 		if (session?.user?.socials?.length > 0) {
 			if (session?.user?.bio?.length > 0) {
@@ -21,10 +26,12 @@ export default function Navbar() {
 				return false;
 			}
 			return false;
-		} 
+		}
 		return false;
 	}
-	const [isHeadlineOpen, setisHeadlineOpen] = useState( !completionLevel() || false);
+	const [isHeadlineOpen, setisHeadlineOpen] = useState(
+		isLoggedIn ? !completionLevel() || false : false
+	);
 	const handleClick = () => {
 		if (!isMenuOpen) {
 			document
@@ -44,14 +51,42 @@ export default function Navbar() {
 			setisMenuOpen(!isMenuOpen);
 		}
 	};
+	const handleSearch = async (searchQuery: string) => {
+		try {
+			const response = await fetch(`/api/searchusers?query=${searchQuery}`);
+			const data = await response.json();
+			setResults(data.users);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	const onInputChange = (e: any) => {
+		const value = e.target.value;
+		setSearch(value);
+
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(() => {
+			handleSearch(search);
+		}, 300);
+	};
 	return (
 		<>
-			<div className={`${sessionStatus === "authenticated" && isHeadlineOpen ? "flex" : "hidden"}`}>
+			<div
+				className={`${
+					sessionStatus === "authenticated" && isHeadlineOpen
+						? "flex"
+						: "hidden"
+				}`}
+			>
 				<div className="w-full flex items-center bg-black">
-					<p className="text-gray-300 text-[.8rem] p-4 mx-auto font-mono hover:underline" onClick={() => {
-						router.push(`/profile/editProfile`);
-					}}>
-						Complete your Profile now to get the most out of the platform....!
+					<p
+						className="text-gray-300 text-[.8rem] p-4 mx-auto font-mono hover:underline"
+						onClick={() => {
+							router.push(`/profile/editProfile`);
+						}}
+					>
+						Complete your Profile now to get the most out of the
+						platform....!
 					</p>
 					<button
 						className="bg-white p-2 me-4 rounded-lg"
@@ -81,12 +116,11 @@ export default function Navbar() {
 			</div>
 			<div className="flex w-[100%] max-w-[2000px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
 				<p className="md:w-[20%] w-[40%] md:m-auto m-4 flex md:justify-center justify-start items-center">
-					{/* <img
+					<img
 						src="/assets/show.png"
 						alt=""
 						className="w-full h-[100%]"
-					/> */}
-					LOGO
+					/>
 				</p>
 				<ul
 					id="toggle-ul"
@@ -117,11 +151,50 @@ export default function Navbar() {
 					</li>
 				</ul>
 				<div className="w-[40%] lg:w-[60%] flex justify-between items-center">
-					<input
-						type="text"
-						className="hidden lg:flex lg:w-[50%] h-[45%] px-8 outline-none rounded-[50px]"
-						placeholder="Search.."
-					/>
+					<div className="relative lg:w-[50%] h-[45%]">
+						<input
+							type="text"
+							className="hidden lg:flex w-full px-8 outline-none rounded-[50px]"
+							placeholder="Search.."
+							value={search}
+							onChange={onInputChange}
+						/>
+						{search.length > 0 && (
+							<div className="absolute top-[8vh] p-2 h-max w-full bg-white z-30 border">
+								{results.length > 0 && (
+									<>
+										{results.map((result) => (
+											<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 py-4">
+												<div className="flex items-center">
+													<img
+														src={result.image}
+														alt=""
+														className="w-16 h-16 rounded-[50%]"
+													/>
+													<div className="flex flex-col ml-4">
+														<p className="text-xl font-semibold">
+															{result.name}
+														</p>
+														<p className="text-sm font-semibold">
+															{result.username}
+														</p>
+													</div>
+												</div>
+												<Link
+													href={`profile/${result._id}`}
+													target="_blank"
+													rel="noreferrer"
+													className="bg-[#1f1c20] text-white px-4 py-2 rounded-md"
+												>
+													View
+												</Link>
+											</div>
+										))}
+									</>
+								)}
+							</div>
+						)}
+					</div>
 					{isLoggedIn ? (
 						<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
 							<a className="flex items-center">
