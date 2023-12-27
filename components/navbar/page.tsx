@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import UserPreview from "../UserPreview";
@@ -141,10 +141,13 @@ export default function Navbar() {
 					</li>
 					<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-black my-8 md:my-0">
 						<Link
-							href={"/auth"}
+							href={isLoggedIn ? "/" : "/auth"}
 							className={`py-2 px-4 border text-center hover:bg-white hover:text-black border-gray-200 ${
 								!isLoggedIn ? "text-white" : "text-red-600"
 							}`}
+							onClick={() => {
+								if (isLoggedIn) signOut(); 
+							}}
 						>
 							{isLoggedIn ? "Logout" : "Login"}
 						</Link>
