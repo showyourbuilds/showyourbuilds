@@ -18,7 +18,7 @@ const Notifications = ({ notifications }: { notifications: any }) => {
 					onBlur={() => setIsOpen(false)}
 					className="flex justify-center w-full p-4 text-sm font-medium"
 				>
-                    <i className="fa-regular fa-bell text-[1rem]"></i>
+					<i className="fa-regular fa-bell text-[1rem]"></i>
 				</button>
 			</div>
 
@@ -30,55 +30,12 @@ const Notifications = ({ notifications }: { notifications: any }) => {
 						aria-orientation="vertical"
 						aria-labelledby="options-menu"
 					>
-						<div aria-label="navigation" className="py-2">
-							<nav className="grid gap-1">
-								<a
-									href="/"
-									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-								>
-									<span>Account Settings</span>
-								</a>
-								<a
-									href="/"
-									className="flex items-center leading-6 space-x-3 py-3 px-4 w-full text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-								>
-									<span>Contact Us</span>
-								</a>
-							</nav>
+						<div>
+							<div className="flex flex-col p-4 px-4 py-2">
+								<p className="text-sm text-start font-semibold font-sans">Welcome</p>
+								<p className="text-[10px] font-thin text-end font-mono">1min ago</p>
+							</div>
 						</div>
-						
-						<div aria-label="footer" className="pt-2">
-							<button
-								type="button"
-								className="flex items-center space-x-3 py-3 px-4 w-full leading-6 text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md"
-                                onClick={() => signOut()} 
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									aria-hidden="true"
-									className="w-7 h-7"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									strokeWidth="2"
-									stroke="currentColor"
-									fill="none"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path
-										stroke="none"
-										d="M0 0h24v24H0z"
-										fill="none"
-									></path>
-									<path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-									<path d="M9 12h12l-3 -3"></path>
-									<path d="M18 15l3 -3"></path>
-								</svg>
-								<span>Logout</span>
-							</button>
-						</div>
-						{/* Add more items as needed */}
 					</div>
 				</div>
 			)}

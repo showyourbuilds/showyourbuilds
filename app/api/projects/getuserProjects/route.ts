@@ -9,11 +9,7 @@ export const GET = async (req: any) => {
         .populate({
             path: 'owner',
             model: User, 
-            select: 'image username socials'
-        } as {
-            path: string;
-            model: any;
-            select: string;
+            select: 'image name socials'
         });
     if (projects.length > 0) {
         return NextResponse.json({ projects: projects, status: 200 });

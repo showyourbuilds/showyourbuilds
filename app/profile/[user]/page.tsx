@@ -11,27 +11,28 @@ export default function User({ params }: { params: { user: string } }) {
 	const [projects, setProjects] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const user = session?.user as any;
+	const [userProfile, setUserProfile] = useState({} as any);
 	const profileBtns = () => {
 		if (params.user === user?._id) {
 			return (
 				<Link href={"/profile/editProfile"}>
-					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
+					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4 h-max">
 						Edit Profile
 					</button>
 				</Link>
 			);
 		} else {
 			return (
-				<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
+				<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] px-4 py-2 h-max">
 					Follow
 				</button>
 			);
 		}
 	};
 	function completionLevel() {
-		if (user?.socials?.length > 0) {
-			if (user?.bio?.length > 0) {
-				if (user?.image.length > 0) {
+		if (userProfile?.socials?.length > 0) {
+			if (userProfile?.bio?.length > 0) {
+				if (userProfile?.image.length > 0) {
 					return 100;
 				}
 				return 75;
@@ -40,6 +41,37 @@ export default function User({ params }: { params: { user: string } }) {
 		} 
 		return 10;
 	}
+
+	useEffect(() => {
+		setLoading(true);
+		async function getData() {
+			try {
+				const data = await fetch(`/api/profile?id=${params.user}`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const res = await data.json();
+				if (res.status === 200) {
+					setUserProfile(res.user);
+					setLoading(false);
+				} else {
+					setLoading(false);
+				}
+			} catch (error) {
+				console.log(error);
+				setLoading(false);
+			}
+		}
+		if (session && session.user?._id !== params.user) {
+			getData();
+		} else if (session && session.user?._id === params.user) {
+			setUserProfile(session.user);
+			setLoading(false);
+		}
+	}, [session]);
+
 	useEffect(() => {
 		setLoading(true);
 		async function getData() {
@@ -80,7 +112,7 @@ export default function User({ params }: { params: { user: string } }) {
 				<div className="w-full aspect-[3/1] relative" id="header">
 					<img src="/assets/header.jpeg" className="w-full" alt="" />
 					<img
-						src={user?.image || "/assets/account.png"}
+						src={userProfile?.image || "/assets/account.png"}
 						className="absolute w-[10%] z-[10] rounded-[50%] border-white bg-white left-4 bottom-[15px]"
 						alt=""
 					/>
@@ -95,10 +127,10 @@ export default function User({ params }: { params: { user: string } }) {
 					>
 						<div className="pl-2">
 							<p className="text-[1.5rem] font-sans font-bold">
-								{user?.name}
+								{userProfile?.name}
 							</p>
 							<p className="text-[1rem] text-gray-500 font-sans font-thin">
-								@{user?.username}
+								@{userProfile?.username}
 							</p>
 						</div>
 						{profileBtns()}
@@ -108,22 +140,24 @@ export default function User({ params }: { params: { user: string } }) {
 						id="profile-bio"
 					>
 						<p className="text-[1rem] font-semibold font-sans">
-							{user?.bio}
+							{userProfile?.bio}
 						</p>
 					</div>
-					{user?.socials?.length > 0 ? (
+					{userProfile?.socials?.length > 0 ? (
 						<div className="flex items-center w-full my-4">
-							<LinksBar links={user?.socials} />
+							<LinksBar links={userProfile?.socials} />
 						</div>
 					) : (
 						<p className="text-gray-400 font-mono my-4 pl-4 text-[13px]">Add your socials to display them here</p>
 					)}
 				</div>
-				<Link href={"/projects/createproject"}>
-					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
-						Create Project
-					</button>
-				</Link>
+				{user?._id === params.user && 
+					<Link href={"/projects/createproject"}>
+						<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
+							Create Project
+						</button>
+					</Link>
+				}
 			</div>
 			<div className="w-[50%] my-2 h-[0.5px] mx-auto bg-gray-300"></div>
 			{projects.length > 0 ? (

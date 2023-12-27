@@ -1,6 +1,7 @@
 "use client";
 import Alert from "@/components/Alert";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
+import ProjectCard from "@/components/projectsRender/ProjectCard";
 import React, { useState } from "react";
 
 export default function page() {
@@ -19,9 +20,9 @@ export default function page() {
 
 	const handleSearch = async (searchQuery: string) => {
 		try {
-			const response = await fetch(`/api/search?query=${searchQuery}`);
+			const response = await fetch(`/api/searchprojects?query=${searchQuery}`);
 			const data = await response.json();
-			setResults(data);
+			setResults(data.projects);
 		} catch (error) {
             setAlertMessage("Something went wrong");
             openAlert();
@@ -45,38 +46,21 @@ export default function page() {
 				onClose={closeAlert}
 				message={alertMessage}
 			/>
-			{results.length > 0 && (
-				<div className="w-[90%] mx-auto">
+			<input
+				type="text"
+				value={search}
+				className="flex my-4 w-[80%] mx-auto py-2 px-8 outline-none rounded-[50px]"
+				placeholder="Search for Projects by their titles.."
+				onChange={onInputChange}
+			/>
+			{results.length > 0 && search.length > 0 && (
+				<div className="w-[50%] mx-auto">
 					<p className="text-2xl font-semibold my-4">
 						Search Results
 					</p>
-					<div className="flex flex-col">
-						{results.map((result) => (
-							<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 py-4">
-								<div className="flex items-center">
-									<img
-										src={result.image}
-										alt=""
-										className="w-16 h-16 rounded-[50%]"
-									/>
-									<div className="flex flex-col ml-4">
-										<p className="text-xl font-semibold">
-											{result.title}
-										</p>
-										<p className="text-sm font-semibold">
-											{result.description}
-										</p>
-									</div>
-								</div>
-								<a
-									href={result.link}
-									target="_blank"
-									rel="noreferrer"
-									className="bg-[#1f1c20] text-white px-4 py-2 rounded-md"
-								>
-									View
-								</a>
-							</div>
+					<div className="flex flex-col w-full mx-auto">
+						{results.map((result, index) => (
+							<ProjectCard key={index} item={result} />
 						))}
 					</div>
 				</div>

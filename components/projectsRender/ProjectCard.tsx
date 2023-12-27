@@ -34,8 +34,8 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 			);
 			const res = await data.json();
 			if (res.status === 200) {
-				console.log(res);
 				router.refresh();
+				window.location.reload();
 			}
 		} catch (error) {
 			console.log(error);
@@ -78,13 +78,26 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 			)} */}
 			<div
 				className={`p-2 ${
-					session?.user?._id === item?.owner?._id
+					session?.user?._id === item?.owner?._id ? "flex" : "hidden"
 				} items-center absolute right-4 top-4 bg-white rounded-[30px] cursor-pointer`}
 				onClick={() => {
 					setMoreMenu(!moreMenu);
 				}}
 			>
 				<img src="/assets/more.png" width={20} alt="" />
+			</div>
+			<div
+				className={`${
+					session?.user?._id !== item?.owner?._id ? "flex" : "hidden"
+				} items-center absolute right-4 top-4 bg-white rounded-[50%] cursor-pointer`}
+			>
+				<button className="p-2 m-2" onClick={handleBookmarkProject}>
+					{bookmarked ? (
+						<img src="/assets/bookmarked.png" width={20} alt="" />
+					) : (
+						<img src="/assets/bookmark.png" width={20} alt="" />
+					)}
+				</button>
 			</div>
 			<div
 				className={`p-2 ${
@@ -96,13 +109,6 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 				</button>
 				<button className="p-2 mx-2" onClick={handleDeleteProject}>
 					<img src="/assets/delete.png" width={20} alt="" />
-				</button>
-				<button className="p-2 mx-2" onClick={handleBookmarkProject}>
-					{bookmarked ? (
-						<img src="/assets/bookmarked.png" width={20} alt="" />
-					) : (
-						<img src="/assets/bookmark.png" width={20} alt="" />
-					)}
 				</button>
 			</div>
 			<div className="w-full h-fit rounded-t-lg">
