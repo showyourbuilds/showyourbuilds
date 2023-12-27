@@ -238,7 +238,7 @@ export default function CreateProject({ params }: { params: any }) {
 
 	useEffect(() => {
 		if (!session) {
-			router.push("/");
+			router.push("/auth");
 		}
 	}, []);
 
@@ -246,7 +246,7 @@ export default function CreateProject({ params }: { params: any }) {
 		async function getProject() {
 			try {
 				const project = await fetch(
-					`/api/projects?id=${params.projectid}`,
+					`/api/projects/getProjectByID?id=${params.projectid}`,
 					{
 						method: "GET",
 						headers: {

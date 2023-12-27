@@ -1,7 +1,6 @@
 "use client";
 import Alert from "@/components/Alert";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
-import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 export default function page() {
