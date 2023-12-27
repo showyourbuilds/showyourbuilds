@@ -115,7 +115,7 @@ export default function Navbar() {
 				</div>
 			</div>
 			<div className="flex w-[100%] max-w-[2000px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
-				<p className="md:w-[20%] w-[40%] md:m-auto m-4 flex md:justify-center justify-start items-center">
+				<p className="w-auto h-full md:m-auto mx-4 flex md:justify-center justify-start items-center">
 					<img
 						src="/assets/show.png"
 						alt=""
@@ -164,9 +164,9 @@ export default function Navbar() {
 						/>
 						{search.length > 0 && (
 							<div className="absolute top-[8vh] p-2 h-max w-full bg-white z-30 border">
-								{results.length > 0 && (
+								{results?.length > 0 && (
 									<>
-										{results.map((result) => (
+										{results?.map((result) => (
 											<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 py-4">
 												<div className="flex items-center">
 													<img

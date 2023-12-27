@@ -54,7 +54,7 @@ export default function page() {
 				onChange={onInputChange}
 			/>
 			{results.length > 0 && search.length > 0 && (
-				<div className="w-[50%] mx-auto">
+				<div className="lg:w-[50%] md:w-[70%] w-[90%] mx-auto">
 					<p className="text-2xl font-semibold my-4">
 						Search Results
 					</p>
