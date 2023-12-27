@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReduxProvider } from "@/redux/provider";
 import { getServerSession } from "next-auth";
+import { Analytics } from "@vercel/analytics/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default async function RootLayout({
 					<ReduxProvider session={session}>
 						{children}
 					</ReduxProvider>
+					<Analytics />
 				<script
 					src="https://kit.fontawesome.com/eae0ccc16c.js"
 					crossOrigin="anonymous"
