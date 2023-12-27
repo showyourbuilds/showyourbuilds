@@ -20,7 +20,7 @@ export default function TopDevelopers() {
             }
         }
         getUsers();
-    }, []);
+    } ,[]);
     return (
 		<div className="flex flex-col w-[70%] mx-auto">
 			{users.map((item: any, index: number) => {

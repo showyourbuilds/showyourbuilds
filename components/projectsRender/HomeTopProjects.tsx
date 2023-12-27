@@ -25,7 +25,7 @@ export default function HomeTopProjects() {
 			setLoading(false);
 		}
 		getProjects();
-	}, []);
+	} ,[]);
 	return (
 		<div className="flex flex-col h-max w-full items-center justify-center">
 			<div className={`${loading ? "block" : "hidden"}`}>
