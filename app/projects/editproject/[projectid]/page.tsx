@@ -160,6 +160,7 @@ const linkOptions = [
 	{ value: "twitter", label: "Twitter" },
 	{ value: "instagram", label: "Instagram" },
 	{ value: "facebook", label: "facebook" },
+	{ value: "website", label: "website" },
 ];
 const animatedComponents = makeAnimated();
 

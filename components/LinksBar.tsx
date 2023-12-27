@@ -15,7 +15,7 @@ export default function LinksBar({links}: {links: {label: string, link: string}[
                         <a href={link.link}>
                             <img src="/assets/twitter.png" alt="" width={25} className="mx-4" />
                         </a>
-                    ) : link.label === "Portfolio" ? (
+                    ) : link.label === "Portfolio" || link.label === "website" ? (
                         <a href={link.link}>
                             <img src="/assets/link.png" width={25} className="mx-4" alt="" />
                         </a>
