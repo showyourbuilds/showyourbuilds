@@ -45,6 +45,7 @@ const projectSchema = new mongoose.Schema({
                 default: [],
             },
         },
+        default: { total: 0, users: [] }
     },
     commits: {
         type: Number,
