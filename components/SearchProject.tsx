@@ -31,7 +31,7 @@ export default function SearchProject() {
 		<div className="relative w-[90%] flex items-center mx-auto">
 			<input
 				type="text"
-				className="flex md:hidden my-4 w-full mx-auto py-2 px-8 outline-none rounded-[50px]"
+				className="flex lg:hidden my-4 w-full mx-auto py-2 px-8 outline-none rounded-[50px]"
 				placeholder="Search.."
 				onChange={onInputChange}
 			/>

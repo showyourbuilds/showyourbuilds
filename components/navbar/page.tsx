@@ -115,28 +115,31 @@ export default function Navbar() {
 				</div>
 			</div>
 			<div className="flex w-[100%] max-w-[2000px] min-h-[70px] mx-auto md:h-[13vh] h-[10vh] justify-between dark:bg-white">
-				<p className="w-auto h-full md:m-auto mx-4 flex md:justify-center justify-start items-center">
-					<img
-						src="/assets/show.png"
-						alt=""
-						className="w-full h-[100%]"
-					/>
-				</p>
+				<img
+					src="/assets/show.png"
+					alt=""
+					className="w-auto max-w-[300px] h-[100%]"
+				/>
 				<ul
 					id="toggle-ul"
 					className="md:w-[15%] h-[100%] bg-[#1f1c20] transition-all duration-300 rounded-br-[50%] md:rounded-none md:bg-transparent w-full z-30 absolute md:relative md:flex md:left-0 left-[-100vw] justify-around m-auto list-none pt-14 pl-8 md:p-0 items-center"
 				>
-					<li className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all">
+					<li className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 md:hover:bg-transparent md:hover:p-0 transition-all">
 						<Link href={"/"} className="bg-transparent">
 							Home
 						</Link>
 					</li>
-					<li className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 hover:p-4 md:hover:bg-transparent md:hover:p-0 transition-all">
+					<li className="mx-4 flex items-center bg-transparent text-white md:text-gray-700 my-8 font-semibold md:my-0 hover:bg-gray-500 md:hover:bg-transparent md:hover:p-0 transition-all">
 						<Link href={"/explore"} className="bg-transparent">
 							Explore
 						</Link>
 					</li>
-					<li className="mx-4 md:hidden flex text-white items-center bg-transparent my-8 hover:bg-gray-500 hover:p-4 transition-all">
+					<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-gray-700 my-4 font-semibold md:my-0 hover:bg-gray-500 md:hover:bg-transparent md:hover:p-0 transition-all">
+						<Link href={"/bookmarks"} className="bg-transparent">
+							Bookmarks
+						</Link>
+					</li>
+					<li className="md:hidden flex text-white items-center bg-transparent my-4 hover:bg-gray-500 transition-all">
 						<UserPreview user={session?.user} />
 					</li>
 					<li className="mx-4 md:hidden flex items-center bg-transparent text-white md:text-black my-8 md:my-0">

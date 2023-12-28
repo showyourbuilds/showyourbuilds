@@ -1,17 +1,13 @@
 import React from "react";
 
 export default function TechStack({ stack }: { stack: Array<{label: string, value: string}> }) {
-	var a = 1;
 	return (
-		<div className="flex flex-col justify-between px-4 items-center">
-			<p className="text-sm text-gray-500 font-semibold my-1 font-sans">
-				Tech Stack
-			</p>
-			<div className="flex flex-wrap my-2 w-full">
-				{stack.map((item) => {
+		<div className="flex flex-col justify-between px-2">
+			<div className="flex flex-wrap w-full">
+				{stack.map((item, index) => {
 					return (
-						<div key={a++} className="border rounded-lg py-1 px-3 my-1 mx-2 min-w-[40px]">
-							<span className="text-[12px]">{item.label}</span>
+						<div key={index} className="border border-black flex items-center rounded-[15px] py-2 px-4 my-1 mx-2 min-w-[40px] hover:border-transparent hover:bg-black hover:text-white">
+							<span className="text-[12px] font-mono">{item.label}</span>
 						</div>
 					);
 				})}
