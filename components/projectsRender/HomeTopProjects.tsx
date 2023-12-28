@@ -12,9 +12,9 @@ export default function HomeTopProjects() {
 		async function getProjects() {
 			const res = await fetch("/api/projects", {
 				method: "GET",
+				cache: 'no-store',
 				headers: {
 					"Content-Type": "application/json",
-					"Cache-Control": "no-store, must-revalidate"
 				},
 			});
 			const data = await res.json();

@@ -8,9 +8,10 @@ export default function TopDevelopers() {
         async function getUsers() {
             const res = await fetch("/api/user/getTopDevelopersbyWeek", {
                 method: "GET",
+                cache: 'no-store',
                 headers: {
                     "Content-Type": "application/json",
-					"Cache-Control": "no-store, must-revalidate"
+					"Cache-Control": "no-store"
                 },
             });
             const data = await res.json();
