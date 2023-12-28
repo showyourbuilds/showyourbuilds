@@ -6,7 +6,7 @@ export default function TopDevelopers() {
 	const [users, setUsers] = useState([] as any[]);
     useEffect(() => {
         async function getUsers() {
-            const res = await fetch("/api/user/getTopDevelopersbyWeek", {
+            const res = await fetch(`/api/user/getTopDevelopersbyWeek?timestamp=${new Date().getTime()}`, {
                 method: "GET",
                 cache: 'no-store',
                 headers: {
