@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import UserPreview from "../UserPreview";
 import TechStack from "../TechStack";
 import { useRouter } from "next/navigation";
@@ -9,17 +9,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleBookmark } from "@/redux/features/authSlice";
 
 export default function ProjectCard({ item, key }: { item: any; key: any }) {
-	const [isLiked, setLiked] = useState(false);
 	const [moreMenu, setMoreMenu] = useState(false);
 	const isBookmarked = useSelector((state: any) =>
 		state.bookmarks.includes(item._id)
 	);
 	const [bookmarked, setBookmarked] = useState(isBookmarked || false);
 	const router = useRouter();
-	const { data: session } = useSession() as any;
-	const handleLike = () => {
-		setLiked(!isLiked);
-	};
+	const { data: session, status: sessionStatus } = useSession() as any;
+	const projectRef = useRef(null);
+	const [inView, setInView] = useState(false);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					if (sessionStatus === "authenticated") {
+						const viewCount = fetch('/api/projects/viewCount', {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ projectId: item._id, userId: session?.user?._id }),
+						});
+					}
+					setInView(true);
+					console.log("in view");
+				} else {
+					setInView(false);
+				}
+			},
+		);
+
+		if (projectRef.current) {
+			observer.observe(projectRef.current);
+		}
+
+		return () => {
+			if (projectRef.current) {
+				observer.unobserve(projectRef.current);
+			}
+		};
+	}, [item._id]);
+	
 	const dispatch = useDispatch();
 	const handleDeleteProject = async () => {
 		try {
@@ -57,25 +88,9 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 	return (
 		<div
 			key={key}
+			ref={projectRef}
 			className="md:w-[70%] w-[90%] relative hover:scale-[1.01] transition mx-auto my-8 border rounded-lg"
 		>
-			{/* {isLiked ? (
-				<div
-					className="py-2 px-4 flex items-center absolute right-4 top-4 bg-white rounded-[30px] cursor-pointer"
-					onClick={() => handleLike()}
-				>
-					<span className="mx-2 text-gray-600 font-semibold">20</span>
-					<img src="/assets/heart.png" alt="" width={30} />
-				</div>
-			) : (
-				<div
-					className="py-2 px-4 flex items-center absolute right-4 top-4 bg-white rounded-[30px] cursor-pointer"
-					onClick={() => handleLike()}
-				>
-					<span className="mx-2 text-gray-600 font-semibold">20</span>
-					<img src="/assets/like.png" alt="" width={30} />
-				</div>
-			)} */}
 			<div
 				className={`p-2 ${
 					session?.user?._id === item?.owner?._id ? "flex" : "hidden"
@@ -128,7 +143,9 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 					<TechStack stack={item?.techStack} />
 				)}
 				<div className="flex w-full justify-between flex-col px-4 py-2 mt-4">
-					<p className="text-[0.8rem] text-gray-500 font-sans">{item.desc}</p>
+					<p className="text-[0.8rem] text-gray-500 font-sans">
+						{item.desc}
+					</p>
 					<div className="flex w-full justify-start items-center mt-4 border border-transparent hover:border-gray-400 transition py-2">
 						<div className="w-max">
 							<UserPreview user={item.owner} />

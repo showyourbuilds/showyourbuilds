@@ -35,8 +35,16 @@ const projectSchema = new mongoose.Schema({
         required: true,
     },
     views: {
-        type: Number,
-        default: 0,
+        type: {
+            total: {
+                type: Number,
+                default: 0,
+            },
+            users: {
+                type: [String],
+                default: [],
+            },
+        },
     },
     commits: {
         type: Number,
