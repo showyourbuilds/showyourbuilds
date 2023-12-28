@@ -20,25 +20,26 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 	const [inView, setInView] = useState(false);
 
 	useEffect(() => {
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					if (sessionStatus === "authenticated") {
-						const viewCount = fetch('/api/projects/viewCount', {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({ projectId: item._id, userId: session?.user?._id }),
-						});
-					}
-					setInView(true);
-					console.log("in view");
-				} else {
-					setInView(false);
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting) {
+				if (sessionStatus === "authenticated") {
+					const viewCount = fetch("/api/projects/viewCount", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							projectId: item._id,
+							userId: session?.user?._id,
+						}),
+					});
 				}
-			},
-		);
+				setInView(true);
+				console.log("in view");
+			} else {
+				setInView(false);
+			}
+		});
 
 		if (projectRef.current) {
 			observer.observe(projectRef.current);
@@ -50,7 +51,7 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 			}
 		};
 	}, [item._id]);
-	
+
 	const dispatch = useDispatch();
 	const handleDeleteProject = async () => {
 		try {
@@ -170,6 +171,9 @@ export default function ProjectCard({ item, key }: { item: any; key: any }) {
 				) : (
 					<></>
 				)}
+				<div className="w-max text-gray-500 font-mono text-[10px] absolute bottom-4 right-4">
+					{item.views.total} views
+				</div>
 			</div>
 		</div>
 	);

@@ -18,6 +18,9 @@ async function getProjects() {
         path: 'owner',
         model: User,
         select: 'image socials name'
+    }).sort({
+        createdAt: -1,
+        'views.total': -1,
     });
     if (projects) {
         return projects;
