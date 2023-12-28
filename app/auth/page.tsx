@@ -73,14 +73,14 @@ export default function auth() {
 			setLoading(false);
 			return;
 		}
-		const password = e.target[2].value;
+		const password = e.target[3].value;
 		if (!password || password.length < 8) {
 			setAlertMessage("Password must be atleast 8 characters long");
 			openAlert();
 			setLoading(false);
 			return;
 		}
-		if (password !== e.target[3].value) {
+		if (password !== e.target[4].value) {
 			setAlertMessage("Passwords don't match");
 			openAlert();
 			setLoading(false);
