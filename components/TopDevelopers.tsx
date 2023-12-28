@@ -10,6 +10,7 @@ export default function TopDevelopers() {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
+					"Cache-Control": "no-store, must-revalidate"
                 },
             });
             const data = await res.json();

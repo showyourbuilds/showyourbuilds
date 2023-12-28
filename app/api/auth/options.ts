@@ -51,11 +51,6 @@ export const authOptions: AuthOptions = {
 					image: profile.avatar_url,
 				};
 			},
-			authorization: {
-				params: {
-					scope: "repo user:email",
-				},
-			},
 		}),
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID ?? "",
@@ -85,6 +80,7 @@ export const authOptions: AuthOptions = {
 						const newUser = new User({
 							name: user.name as string,
 							username: user?.username as string,
+							image: user?.image as string,
 							email: (user?.email as string) || "",
 							provider: ["github"],
 							bookmarks: [],

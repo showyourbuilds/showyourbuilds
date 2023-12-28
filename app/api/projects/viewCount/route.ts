@@ -12,6 +12,9 @@ export const POST = async (req: any, res: any) => {
 		return NextResponse.json({ message: "Project not found", status: 404 });
 	}
 	const response = await project.save();
-	if (response.acknowledged)
+	if (response.acknowledged) {
 		return NextResponse.json({ message: "success", status: 200 });
+	} else {
+		return NextResponse.json({ message: "Some error occured", status: 404 });
+	}
 };

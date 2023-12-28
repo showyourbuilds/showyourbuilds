@@ -148,7 +148,7 @@ export default function User({ params }: { params: { user: string } }) {
 							<LinksBar links={userProfile?.socials} />
 						</div>
 					) : (
-						<p className="text-gray-400 font-mono my-4 pl-4 text-[13px]">Add your socials to display them here</p>
+						<></>
 					)}
 				</div>
 				{user?._id === params.user && 
