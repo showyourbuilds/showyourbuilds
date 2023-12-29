@@ -32,7 +32,7 @@ const projectSchema = new mongoose.Schema({
     },
     repoLink: {
         type: String,
-        required: true,
+        required: false,
     },
     views: {
         type: {
