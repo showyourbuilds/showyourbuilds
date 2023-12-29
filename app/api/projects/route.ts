@@ -5,7 +5,7 @@ import connect from "@/config/db";
 
 export const GET = async (req: any) => {
 	await connect();
-	const projects = await Project.find()
+	const projects = await Project.find({})
 		.populate({
 			path: "owner",
 			model: User,
