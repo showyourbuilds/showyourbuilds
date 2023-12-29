@@ -10,7 +10,7 @@ export default function HomeTopProjects() {
 	useEffect(() => {
 		setLoading(true);
 		async function getProjects() {
-			const res = await fetch(`/api/projects?timestamp=${new Date().getTime()}`, {
+			const res = await fetch(`/api/projects/getTopProjects?timestamp=${new Date().getTime()}`, {
 				method: "GET",
 				cache: 'no-store',
 				headers: {
