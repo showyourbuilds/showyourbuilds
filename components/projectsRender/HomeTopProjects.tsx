@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from "react";
 import ProjectCard from "./ProjectCard";
 import LoadingPage from "../LoadingPage";
+import { useSession } from "next-auth/react";
 
 export default function HomeTopProjects() {
+	const { data: session } = useSession() as any;
 	const [projects, setProjects] = React.useState([] as any[]);
 	const [loading, setLoading] = useState(false);
 
@@ -26,7 +28,7 @@ export default function HomeTopProjects() {
 			setLoading(false);
 		}
 		getProjects();
-	} ,[]);
+	}, [session]);
 	return (
 		<div className="flex flex-col h-max w-full items-center justify-center">
 			<div className={`${loading ? "block" : "hidden"}`}>
