@@ -13,17 +13,20 @@ export const GET = async (req: any) => {
 }
 
 async function getProjects() {
-    await connect();
-    const projects = await Project.find().populate({
-        path: 'owner',
-        model: User,
-        select: 'image socials name'
-    }).sort({
-        createdAt: -1,
-        'views.total': -1,
-    });
-    if (projects) {
+    try{
+        await connect();
+        const projects = await Project.find().populate({
+            path: 'owner',
+            model: User,
+            select: 'image socials username name'
+        }).sort({
+            createdAt: -1,
+            'views.total': -1,
+        });
+
         return projects;
+    } catch (error) {
+        console.log(error);
+        return null;
     }
-    return null;
 }

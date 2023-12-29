@@ -10,6 +10,8 @@ export const GET = async (req: any) => {
             path: 'owner',
             model: User, 
             select: 'image name socials'
+        }).sort({
+            createdAt: -1,
         });
     if (projects.length > 0) {
         return NextResponse.json({ projects: projects, status: 200 });

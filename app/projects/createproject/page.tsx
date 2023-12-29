@@ -291,7 +291,7 @@ export default function CreateProject() {
 							);
 							if (project.status === 200) {
 								setLoading(false);
-								router.push(`/profile/${session?.user?._id}`);
+								router.push(`/`);
 							} else {
 								setLoading(false);
 								setAlertMessage(
