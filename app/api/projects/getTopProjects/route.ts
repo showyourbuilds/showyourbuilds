@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import connect from "@/config/db";
 
 export const GET = async (req: any) => {
+	const { searchParams } = new URL(req.url);
+	const timestamp = searchParams.get('timestamp');
 	await connect();
 	const projects = await Project.find({})
 		.populate({
@@ -16,7 +18,7 @@ export const GET = async (req: any) => {
 			"views.total": -1,
 		});
 	if (projects.length > 0) {
-		return NextResponse.json({ projects: projects, status: 200 });
+		return NextResponse.json({ projects: projects, status: 200, timestamp });
 	} else {
 		return NextResponse.json({
 			message: "Projects not found",
