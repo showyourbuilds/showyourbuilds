@@ -50,7 +50,7 @@ const MobileMenu = ({ user }: { user: any }) => {
 					<div role="menu">
 						<div aria-label="navigation">
 							<Link
-								href={`/profile/${user?._id}`}
+								href={`/profile/${user?.username}`}
 								className="flex items-center leading-6 space-x-3 p-4 w-full text-gray-600 focus:outline-none hover:bg-gray-100"
 							>
 								<span>Account</span>

@@ -17,7 +17,7 @@ export const POST = async (req: any) => {
 export const GET = async (req:any) => {
     await connect();
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
+    const id = searchParams.get("username");
     const user = await getProfile(id as string);
     if (user) {
         return NextResponse.json({ user: user, status: 200 });
@@ -27,7 +27,7 @@ export const GET = async (req:any) => {
 }
 
 async function getProfile(id: string) {
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ username: id });
     if (user) {
         return user;
     }

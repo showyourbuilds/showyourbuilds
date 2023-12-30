@@ -13,7 +13,7 @@ export default function User({ params }: { params: { user: string } }) {
 	const user = session?.user as any;
 	const [userProfile, setUserProfile] = useState({} as any);
 	const profileBtns = () => {
-		if (params.user === user?._id) {
+		if (params.user === user?.username) {
 			return (
 				<Link href={"/profile/editProfile"}>
 					<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4 h-max">
@@ -46,7 +46,7 @@ export default function User({ params }: { params: { user: string } }) {
 		setLoading(true);
 		async function getData() {
 			try {
-				const data = await fetch(`/api/profile?id=${params.user}`, {
+				const data = await fetch(`/api/profile?username=${params.user}`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
@@ -64,9 +64,9 @@ export default function User({ params }: { params: { user: string } }) {
 				setLoading(false);
 			}
 		}
-		if (session && session.user?._id !== params.user) {
+		if (session && session.user?.username !== params.user) {
 			getData();
-		} else if (session && session.user?._id === params.user) {
+		} else if (session && session.user?.username === params.user) {
 			setUserProfile(session.user);
 			setLoading(false);
 		}
