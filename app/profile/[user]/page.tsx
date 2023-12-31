@@ -7,7 +7,7 @@ import Link from "next/link";
 import LoadingPage from "@/components/LoadingPage";
 import LinksBar from "@/components/LinksBar";
 export default function User({ params }: { params: { user: string } }) {
-	const { data: session } = useSession() as any;
+	const { data: session, update } = useSession() as any;
 	const [projects, setProjects] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const user = session?.user as any;
@@ -29,6 +29,36 @@ export default function User({ params }: { params: { user: string } }) {
 			);
 		}
 	};
+	async function handleFollow () {
+		let tempuser = { ...userProfile };
+		if (user?.followers?.users?.includes(tempuser?.username)) {
+			tempuser.followers.total--;
+			tempuser.followers.users = tempuser.followers.users.filter((item: any) => item !== user?.username);
+		} else {
+			tempuser.followers.total++;
+			tempuser.followers.users.push(user?.username);
+		}
+		try {
+			const data = await fetch(`/api/profile/followUnfollow`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					tempuser
+				})
+			});
+			const res = await data.json();
+			if (res.status === 200) {
+				setUserProfile(res.user);
+				update();
+			} else {
+				console.log(res);
+			}
+		} catch (error) {
+			console.log(error);
+		}	
+	}
 	function completionLevel() {
 		if (userProfile?.socials?.length > 0) {
 			if (userProfile?.bio?.length > 0) {

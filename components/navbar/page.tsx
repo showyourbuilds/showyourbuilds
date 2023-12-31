@@ -1,17 +1,20 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserPreview from "../UserPreview";
 import Notifications from "../Notifications";
 import MobileMenu from "../MobileMenu";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SocketContext } from "@/config/context/SocketContext";
+
 export default function Navbar() {
 	const { data: session, status: sessionStatus } = useSession() as any;
 	let searchTimeout: NodeJS.Timeout;
 	const searchParams = useSearchParams();
 	const isLoggedIn = sessionStatus === "authenticated" ? true : false;
 	const router = useRouter();
+	const socket = useContext(SocketContext);
 	const [isMenuOpen, setisMenuOpen] = useState(false);
 	const [search, setSearch] = useState(
 		searchParams.get("query") || ("" as string)
@@ -32,6 +35,15 @@ export default function Navbar() {
 	const [isHeadlineOpen, setisHeadlineOpen] = useState(
 		isLoggedIn ? !completionLevel() || false : false
 	);
+
+	useEffect(() => {
+		socket.on('connect', () => {
+			console.log('connected');
+		});
+		console.log(socket);
+		if(isLoggedIn) socket.emit('newuser', { username: session?.user?.username, userId: session?.user?._id });
+	}, [socket, isLoggedIn]);
+
 	const handleClick = () => {
 		if (!isMenuOpen) {
 			document

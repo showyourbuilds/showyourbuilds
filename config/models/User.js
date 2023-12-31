@@ -11,9 +11,19 @@ const user = new mongoose.Schema({
     image: { type: String, required: false },
     bookmarks: { type: Array, required: false, default: [] },
     provider: { type: Array, required: true, default: ['credentials'] },
-}, 
-{
-    timestamps: true,
-});
+    following: {
+        type: {
+            total: { type: Number, default: 0 },
+            users: { type: Array, default: [] },
+        },
+        default: {
+            total: 0,
+            users: [],
+        }
+    },
+},
+    {
+        timestamps: true,
+    });
 
 export default mongoose.models.User || mongoose.model("User", user);
