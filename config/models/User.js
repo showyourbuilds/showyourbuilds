@@ -11,7 +11,7 @@ const user = new mongoose.Schema({
     image: { type: String, required: false },
     bookmarks: { type: Array, required: false, default: [] },
     provider: { type: Array, required: true, default: ['credentials'] },
-    following: {
+    followers: {
         type: {
             total: { type: Number, default: 0 },
             users: { type: Array, default: [] },
