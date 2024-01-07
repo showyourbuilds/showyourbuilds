@@ -90,7 +90,7 @@ export default function User({ params }: { params: { user: string } }) {
 	function completionLevel() {
 		if (userProfile?.socials?.length > 0) {
 			if (userProfile?.bio?.length > 0) {
-				if (userProfile?.image.length > 0) {
+				if (userProfile?.image?.length > 0) {
 					return 100;
 				}
 				return 75;
@@ -239,7 +239,7 @@ export default function User({ params }: { params: { user: string } }) {
 				)}
 			</div>
 			<div className="w-[50%] my-2 h-[0.5px] mx-auto bg-gray-300"></div>
-			{projects.length > 0 ? (
+			{projects?.length > 0 ? (
 				<div
 					className="md:w-[70%] w-[90%] mx-auto flex flex-col"
 					id="projects"
