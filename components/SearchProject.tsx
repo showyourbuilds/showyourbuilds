@@ -37,7 +37,7 @@ export default function SearchProject() {
 			/>
 			{search.length > 0 && (
 				<div className="absolute top-[10vh] p-2 h-max max-h-[100vh] overflow-y-scroll w-full bg-white z-30 border">
-					{results.length > 0 && (
+					{results?.length > 0 && (
 						<>
 							{results.map((result) => (
 								<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 py-4">
