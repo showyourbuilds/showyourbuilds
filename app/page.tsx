@@ -1,8 +1,6 @@
 import React from "react";
-import data from "../public/dummyproducts.json";
 import ComposedLayout from "@/components/layouts/ComposedLayout";
-import UserPreview from "@/components/UserPreview";
-import SearchProject from "@/components/SearchProject";
+import SearchUsers from "@/components/SearchUsers";
 import HomeTopProjects from "@/components/projectsRender/HomeTopProjects";
 import TopDevelopers from "@/components/TopDevelopers";
 
@@ -13,7 +11,7 @@ export default async function Home() {
 				Let your{" "}
 				<span className="text-gray-500 font-serif">Projects</span> speak
 			</p>
-			<SearchProject />
+			<SearchUsers />
 			<div className="flex w-[90%] mx-auto justify-center mt-4">
 				<div className="flex md:w-[70%] w-full flex-col items-center">
 					<p className="md:text-2xl text-sm font-thin font-sans my-4 flex items-center justify-center">
