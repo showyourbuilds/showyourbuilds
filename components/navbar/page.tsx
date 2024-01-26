@@ -182,18 +182,18 @@ export default function Navbar() {
 								{results?.length > 0 && (
 									<>
 										{results?.map((result) => (
-											<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 py-4">
+											<div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 p-4">
 												<div className="flex items-center">
 													<img
 														src={result.image}
 														alt=""
-														className="w-16 h-16 rounded-[50%]"
+														className="w-10 h-10 rounded-[50%]"
 													/>
 													<div className="flex flex-col ml-4">
-														<p className="text-xl font-semibold">
+														<p className="text-xl">
 															{result.name}
 														</p>
-														<p className="text-sm font-semibold">
+														<p className="text-sm font-thin">
 															{result.username}
 														</p>
 													</div>
@@ -202,7 +202,7 @@ export default function Navbar() {
 													href={`profile/${result._id}`}
 													target="_blank"
 													rel="noreferrer"
-													className="bg-[#1f1c20] text-white px-4 py-2 rounded-md"
+													className="px-4 py-2 rounded-md border border-gray-400 text-gray-500"
 												>
 													View
 												</Link>
@@ -215,9 +215,6 @@ export default function Navbar() {
 					</div>
 					{isLoggedIn ? (
 						<div className="w-full xl:w-[35%] lg:w-[45%] mx-auto flex items-center justify-around">
-							<a className="flex items-center">
-								<Notifications notifications={[]} />
-							</a>
 							<div className="hidden md:block">
 								<MobileMenu user={session?.user} />
 							</div>

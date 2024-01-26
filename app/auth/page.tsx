@@ -34,11 +34,11 @@ export default function auth() {
 	};
 	const handleGithubLogin = async () => {
 		setLoading(true);
-		signIn("github");
+		signIn("github", { callbackUrl: "/" });
 	}
 	const handleGoogleLogin = async () => {
 		setLoading(true);
-		signIn("google");
+		signIn("google", { callbackUrl: "/" });
 	}
 	const handleLogin = async (e: any) => {
 		setLoading(true);
@@ -186,7 +186,7 @@ export default function auth() {
 								/>
 							</svg>
 						</button>
-						{/* <button
+						<button
 							type="button"
 							className="bg-[#2363c9] text-white hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-black focus:ring-[#4285F4]/50 rounded-[50%] p-2 inline-flex items-center dark:focus:ring-[#4285F4]/55 me-2 mb-2"
 							onClick={() => handleGoogleLogin()}
@@ -204,7 +204,7 @@ export default function auth() {
 									clipRule="evenodd"
 								/>
 							</svg>
-						</button> */}
+						</button>
 					</div>
 					<div className="md:w-[50%] w-[90%] my-2 h-[0.5px] bg-gray-300"></div>
 					<button

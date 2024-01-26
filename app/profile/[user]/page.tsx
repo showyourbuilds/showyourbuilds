@@ -52,7 +52,7 @@ export default function User({ params }: { params: { user: string } }) {
 	async function handleFollow() {
 		setBtnLoading(true);
 		let tempuser = { ...userProfile };
-		if (user?.followers?.users?.includes(tempuser?.username)) {
+		if (tempuser?.followers?.users?.includes(user?._id)) {
 			tempuser.followers.total--;
 			tempuser.followers.users = tempuser.followers.users.filter(
 				(item: any) => item !== user?._id
@@ -61,7 +61,6 @@ export default function User({ params }: { params: { user: string } }) {
 			tempuser.followers.total++;
 			tempuser.followers.users.push(user?._id);
 		}
-		console.log(tempuser);
 
 		try {
 			const data = await fetch(`/api/user/followUnfollow`, {
@@ -230,7 +229,7 @@ export default function User({ params }: { params: { user: string } }) {
 						<></>
 					)}
 				</div>
-				{user?._id === params.user && (
+				{user?.username === params.user && (
 					<Link href={"/projects/createproject"}>
 						<button className="border border-gray-400 font-sans font-thin text-[#626262] hover:border-black rounded-[20px] py-2 px-4">
 							Create Project
