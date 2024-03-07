@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/redux/provider";
 import { getServerSession } from "next-auth";
 import { Analytics } from "@vercel/analytics/react";
+import { SocketProvider } from "@/config/providers/SocketProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +22,15 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<ReduxProvider session={session}>{children}</ReduxProvider>
-				<Analytics />
-				<script
-					src="https://kit.fontawesome.com/eae0ccc16c.js"
-					crossOrigin="anonymous"
-				></script>
+				<SocketProvider>
+					<ReduxProvider session={session}>{children}</ReduxProvider>
+					<Analytics />
+				</SocketProvider>
 			</body>
+			<script
+				src="https://kit.fontawesome.com/eae0ccc16c.js"
+				crossOrigin="anonymous"
+			></script>
 		</html>
 	);
 }
